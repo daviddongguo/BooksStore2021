@@ -22,9 +22,15 @@ jobs:
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
+      working-directory: ./BooksStore2021.Mvc
+    
+    - name: Test with dotnet
+      run: dotnet test -l "console;verbosity=detailed"
+      working-directory: BooksStore2021.NunitTests
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      working-directory: ./BooksStore2021.Mvc
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
