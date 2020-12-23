@@ -2,6 +2,8 @@ using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Classlib.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace BooksStore2021.Mvc.Controllers
 {
@@ -16,17 +18,28 @@ namespace BooksStore2021.Mvc.Controllers
              .Options;
 
             _ctx = new EFDbContext(options);
-            _ctx.Todoes.Add(new Todo
+
+            if (_ctx.Todoes.FirstOrDefault() == null)
             {
-                Id = "18kxytxr0cak4ay1nj4d",
-                Title = "18kxytxr0cak4ay1nj4d",
-            });
-            _ctx.Add(new Todo
-            {
-                Id = "228kxytxr0cak4ay1nj4d",
-                Title = "228kxytxr0cak4ay1nj4d",
-            });
-            _ctx.SaveChanges();
+                _ctx.Todoes.Add(new Todo
+                {
+                    Id = "18kxytxr0cak4ay1nj4d",
+                    Title = "18kxytxr0cak4ay1nj4d" + DateTime.Now,
+                });
+                _ctx.Add(new Todo
+                {
+                    Id = "228kxytxr0cak4ay1nj4d",
+                    Title = "228kxytxr0cak4ay1nj4d" + DateTime.Now,
+                    IsComplete = true,
+                }); ;
+                try
+                {
+                    _ctx.SaveChanges();
+                }
+                catch (System.Exception)
+                {
+                }
+            }
         }
 
         // GET: TodoesController1
