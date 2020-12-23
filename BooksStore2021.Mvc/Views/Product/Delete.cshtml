@@ -74,9 +74,9 @@
             </div>
             <div class="col-4 ">
                 @* Keep this empty *@
-                @if (Model.ProductId != 0)
+                @if (Model.ProductId != 0 && Model.ImageData != null)
                 {
-                    <img src="@Url.Action("GetImage", "Product", new { Model.ProductId })" class="w-100" style="border-radius:5px; border:1px solid #bbb" />
+                    <img src="@String.Format("data:image/png; base64, {0}", Convert.ToBase64String(Model.ImageData))" class="w-100" style="border-radius:5px; border:1px solid #bbb" />
                 }
             </div>
         </div>
