@@ -1,11 +1,12 @@
 ﻿using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Classlib.Services;
+using BooksStore2021.Mvc.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Controllers
 {
@@ -74,15 +75,100 @@ namespace BooksStore2021.Mvc.Controllers
             }
         }
 
+        //GET - UPSERT
+        public IActionResult Upsert(int? id)
+        {
+
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                Product = new Product(),
+                CategorySelectList = _ctx.Products
+                .Select(x => x.Category)
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i,
+                }),
+            };
+
+            if (id == null)
+            {
+                //this is for create
+                return View(productViewModel);
+            }
+
+            productViewModel.Product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if (productViewModel.Product == null)
+            {
+                return NotFound();
+            }
+
+            return View(productViewModel);
+
+        }
+
+
+        //POST - UPSERT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(ProductViewModel productViewModel, IFormFile image = null)
+        {
+            if (ModelState.IsValid)
+            {
+                if (productViewModel.Product.ProductId == 0)
+                {
+                    //Creating
+                    if (image.Length > 0)
+                    {
+                        productViewModel.Product.ImageMimeType = image.ContentType;
+
+                        // Convert image to byte and save to database
+                        byte[] fileBytes = null;
+                        using var fileStream = image.OpenReadStream();
+                        using var memoryStream = new MemoryStream();
+                        fileStream.CopyTo(memoryStream);
+                        fileBytes = memoryStream.ToArray();
+
+                        productViewModel.Product.ImageData = fileBytes;
+                    }
+
+                    _ctx.Products.Add(productViewModel.Product);
+                }
+                else
+                {
+                    //updating
+                    var toUpdateProduct = _ctx.Products.FirstOrDefault(u => u.ProductId == productViewModel.Product.ProductId);
+
+                    productViewModel.Product.ImageData = toUpdateProduct.ImageData;
+                    _ctx.Products.Update(productViewModel.Product);
+                }
+
+                _ctx.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            productViewModel.CategorySelectList = _ctx.Products
+                .Select(x => x.Category)
+                .Distinct()
+                .OrderBy(x => x)
+                .Select( i => new SelectListItem { 
+                    Text = i,
+                    Value = i,
+                });
+            return View(productViewModel);
+        }
+
+
         // GET: ProductController/Delete/5
         public IActionResult Delete(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
-            if(product == null)
+            if (product == null)
             {
                 return NotFound();
             }
