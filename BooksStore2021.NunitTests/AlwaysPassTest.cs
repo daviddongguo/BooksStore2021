@@ -15,7 +15,7 @@ namespace BooksStore2021.NunitTests
             System.Console.WriteLine("Always Pass");
             Assert.Pass();
             Assert.That(true);
-            Assert.That( "Hello!", Is.EqualTo( "HELLO!" ).IgnoreCase );
+            Assert.That("Hello!", Is.EqualTo("HELLO!").IgnoreCase);
         }
     }
 }

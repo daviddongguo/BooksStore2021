@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BooksStore2021.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using BooksStore2021.Mvc.Models;
+using System.Diagnostics;
 
 namespace BooksStore2021.Mvc.Controllers
 {
