@@ -115,48 +115,61 @@ namespace BooksStore2021.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(ProductViewModel productViewModel, IFormFile image = null)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (productViewModel.Product.ProductId == 0)
-                {
-                    //Creating
-                    if (image.Length > 0)
-                    {
-                        productViewModel.Product.ImageMimeType = image.ContentType;
-
-                        // Convert image to byte and save to database
-                        byte[] fileBytes = null;
-                        using var fileStream = image.OpenReadStream();
-                        using var memoryStream = new MemoryStream();
-                        fileStream.CopyTo(memoryStream);
-                        fileBytes = memoryStream.ToArray();
-
-                        productViewModel.Product.ImageData = fileBytes;
-                    }
-
-                    _ctx.Products.Add(productViewModel.Product);
-                }
-                else
-                {
-                    //updating
-                    var toUpdateProduct = _ctx.Products.FirstOrDefault(u => u.ProductId == productViewModel.Product.ProductId);
-
-                    productViewModel.Product.ImageData = toUpdateProduct.ImageData;
-                    _ctx.Products.Update(productViewModel.Product);
-                }
-
-                _ctx.SaveChanges();
-                return RedirectToAction("Index");
+                return View(productViewModel);
             }
-            productViewModel.CategorySelectList = _ctx.Products
-                .Select(x => x.Category)
-                .Distinct()
-                .OrderBy(x => x)
-                .Select( i => new SelectListItem { 
-                    Text = i,
-                    Value = i,
-                });
-            return View(productViewModel);
+
+
+            if (productViewModel.Product.ProductId == 0)
+            {
+                //Creating
+                if (image.Length > 0)
+                {
+                    productViewModel.Product.ImageMimeType = image.ContentType;
+
+                    // Convert image to byte and save to database
+                    byte[] fileBytes = null;
+                    using var fileStream = image.OpenReadStream();
+                    using var memoryStream = new MemoryStream();
+                    fileStream.CopyTo(memoryStream);
+                    fileBytes = memoryStream.ToArray();
+
+                    productViewModel.Product.ImageData = fileBytes;
+                }
+
+                _ctx.Products.Add(productViewModel.Product);
+            }
+            else
+            {
+                //updating
+                var toUpdateProduct = _ctx.Products.FirstOrDefault(u => u.ProductId == productViewModel.Product.ProductId);
+                if (image?.Length > 0)
+                {
+                    productViewModel.Product.ImageMimeType = image.ContentType;
+
+                    // Convert image to byte and save to database
+                    byte[] fileBytes = null;
+                    using var fileStream = image.OpenReadStream();
+                    using var memoryStream = new MemoryStream();
+                    fileStream.CopyTo(memoryStream);
+                    fileBytes = memoryStream.ToArray();
+
+                    toUpdateProduct.ImageData = fileBytes;
+                }
+
+                toUpdateProduct.Title = productViewModel.Product.Title;
+                toUpdateProduct.Author = productViewModel.Product.Author;
+                toUpdateProduct.Price = productViewModel.Product.Price;
+                toUpdateProduct.Description = productViewModel.Product.Description;
+                toUpdateProduct.Category = productViewModel.Product.Category;
+
+
+                _ctx.Products.Update(toUpdateProduct);
+            }
+
+            _ctx.SaveChanges();
+            return RedirectToAction("Index");
         }
 
 

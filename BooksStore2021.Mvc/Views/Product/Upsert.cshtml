@@ -29,6 +29,16 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
+                        <label asp-for="Product.Author"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Product.Author" class="form-control" />
+                        <span asp-validation-for="Product.Author" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
                         <label asp-for="Product.Price"></label>
                     </div>
                     <div class="col-8">
@@ -52,7 +62,7 @@
                         Image
                     </div>
                     <div class="col-8">
-                        <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+                        <input type="file" name="Image" id="uploadBox" multiple class="form-control" />
                     </div>
 
                 </div>
