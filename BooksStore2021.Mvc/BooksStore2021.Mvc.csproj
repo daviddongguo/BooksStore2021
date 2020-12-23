@@ -10,6 +10,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
+    <PackageReference Include="MySqlConnector" Version="0.69.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Product\" />
   </ItemGroup>
 
   <PropertyGroup>

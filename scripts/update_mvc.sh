@@ -5,6 +5,9 @@ cd $Root.MVC && pwd
 dotnet add package Microsoft.EntityFrameworkCore.Tools -v 3.1.10
 dotnet add package Microsoft.EntityFrameworkCore.InMemory -v 3.1.10
 
+dotnet add package MySql.Data.EntityFrameworkCore -v 8.0.22
+dotnet add package MySqlConnector -v 0.69.10
+
 cd ./Controllers
 cat > TodoesController.cs << EOF
 using $Root.Classlib.Entities;
