@@ -3,6 +3,9 @@ Root=${PWD##*/}
 
 cd $Root.Classlib && pwd
 dotnet add package Microsoft.EntityFrameworkCore -v 3.1.10
+dotnet add package Microsoft.AspNetCore.Mvc.DataAnnotations -v 2.2.0
+
+
 
 rm Class1.cs
 mkdir -p Entities
