@@ -75,23 +75,49 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
         // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            return View();
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if(product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
         }
 
         // POST: ProductController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult DeleteProduct(int? id)
         {
-            try
+            var dbProduct = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if (dbProduct == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            _ctx.Products.Remove(dbProduct);
+            _ctx.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public FileContentResult GetImage(int productId)
+        {
+            Product product = _ctx
+                .Products
+                .FirstOrDefault(p => p.ProductId == productId);
+
+            if (product != null)
             {
-                return View();
+                return File(product.ImageData, product.ImageMimeType);
+            }
+            else
+            {
+                return null;
             }
         }
     }
