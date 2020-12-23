@@ -11,6 +11,7 @@ namespace BooksStore2021.Mvc.Models.ViewModels
     {
         public Product Product { get; set; }
         public IEnumerable<SelectListItem> CategorySelectList { get; set; }
+        public string ImageDataURL { get; set; } = "";
 
     }
 }
