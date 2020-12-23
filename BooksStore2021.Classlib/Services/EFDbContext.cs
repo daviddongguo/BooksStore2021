@@ -9,5 +9,6 @@ namespace BooksStore2021.Classlib.Services
         {
         }
         public virtual DbSet<Todo> Todoes { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
     }
 }
