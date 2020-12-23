@@ -9,7 +9,7 @@
         </div>
         @if(Model.ImageData != null && Model.ImageMimeType != null)
         {
-          <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@Url.Action("GetImage", "Product", new { Model.ProductId })" alt="Card image cap">
+          <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@String.Format("data:image/png; base64, {0}", Convert.ToBase64String(Model.ImageData))" alt="Card image cap">
         }
 
         <div class="card-body p-1 px-3 row">
