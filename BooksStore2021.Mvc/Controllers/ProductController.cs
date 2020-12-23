@@ -204,20 +204,19 @@ namespace BooksStore2021.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
-        public FileContentResult GetImage(int productId)
+        public FileContentResult GetImageByProductId(int productId)
         {
             Product product = _ctx
                 .Products
-                .FirstOrDefault(p => p.ProductId == productId);
+                .FirstOrDefault(p => p.ProductId == productId && p.ImageData != null && p.ImageMimeType != null);
 
-            if (product != null)
-            {
-                return File(product.ImageData, product.ImageMimeType);
-            }
-            else
+            if (product?.ImageData == null || product?.ImageMimeType == null)
             {
                 return null;
             }
+            return File(product.ImageData, product.ImageMimeType);
         }
+
+
     }
 }
