@@ -16,24 +16,29 @@ namespace BooksStore2021.Mvc.Controllers
         private readonly EFDbContext _ctx;
 
         public readonly int PAGE_SIZE = 6;
-        private readonly IEnumerable<string> _categories;
+        private readonly static List<string> _categories = new List<string>();
 
         public HomeController(ILogger<HomeController> logger, EFDbContext ctx)
         {
             _logger = logger;
             _ctx = ctx;
-            if(_categories?.FirstOrDefault() == null)
+            if (_categories?.FirstOrDefault() == null)
             {
-            _categories = _ctx.Products.Select(p => p.Category).Distinct()
-                .OrderBy(p => p);
+                var list = _ctx.Products.Select(p => p.Category).Distinct()
+                    .OrderBy(p => p);
+                foreach (var catgory in list)
+                {
+                    _categories.AddRange(catgory.Split(" "));
+                }
             }
         }
 
         public IActionResult Index(string queryCategory = null, int page = 1)
         {
-            HomeViewModel homeViewModel = new HomeViewModel{
+            HomeViewModel homeViewModel = new HomeViewModel
+            {
                 Products = _ctx.Products
-                .Where( p => String.IsNullOrEmpty(queryCategory)|| p.Category == queryCategory)
+                .Where(p => String.IsNullOrEmpty(queryCategory) || p.Category.Contains(queryCategory))
                 .OrderBy(p => p.ProductId)
                 .Skip((page - 1) * PAGE_SIZE)
                 .Take(PAGE_SIZE),

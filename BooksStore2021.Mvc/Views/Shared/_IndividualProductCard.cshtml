@@ -14,7 +14,12 @@
 
         <div class="card-body p-1 px-3 row">
             <div class="col-6">
-                <span class="badge p-2 border w-100" style="background-color:lavenderblush">@Model.Category</span>
+              @foreach(string categoryStr in Model.Category.Split(' '))
+              {
+                <div class="col-6">
+                <span class="badge p-2 border w-100" style="background-color:lavenderblush"><a asp-action="Index" asp-controller="Home" asp-route-queryCategory=@categoryStr>@categoryStr</a></span>
+                </div>
+              }
             </div>
             <div class="col-12 p-1">
                 <a asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
