@@ -43,9 +43,11 @@ namespace BooksStore2021.NunitTests.Entities
             target.AddItem(p2, 1);
             // Assert
             Assert.AreEqual(target.Lines.Count(), 2);
+            System.Console.WriteLine(p1);
+            System.Console.WriteLine(p2);
+            System.Console.WriteLine(target);
 
             var json = JsonConvert.SerializeObject(target);
-            System.Console.WriteLine(json);
             var obj = JsonConvert.DeserializeObject<ShoppingCart>(json);
 
             Assert.AreEqual(obj.Lines.Count(), 2);

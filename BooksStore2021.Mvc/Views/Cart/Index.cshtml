@@ -1,0 +1,12 @@
+@model BooksStore2021.Classlib.Entities.ShoppingCart
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+  @foreach(var line in Model?.Lines)
+  {
+    <p>@line.ToString()</p>
+  }
+</div>
