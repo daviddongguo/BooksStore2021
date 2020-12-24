@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class ShippingCart
+    public class ShoppingCart
     {
         private List<CartLine> lineCollection = new List<CartLine>();
 
