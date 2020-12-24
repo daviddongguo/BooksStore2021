@@ -17,7 +17,10 @@
                     <div class="container rounded p-2">
                         <div class="row">
                             <div class="col-12 col-lg-4 p-1 text-center">
+                              @if(Model.Product.ImageData != null)
+                              {
                                 <img src="@String.Format("data:imag/png; base64, {0}", Convert.ToBase64String(Model.Product.ImageData))" width="100%" class="rounded" />
+                              }
                             </div>
                             <div class="col-12 col-lg-8">
                                 <div class="row pl-3">
