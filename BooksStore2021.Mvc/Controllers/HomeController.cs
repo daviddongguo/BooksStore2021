@@ -47,6 +47,16 @@ namespace BooksStore2021.Mvc.Controllers
             return View(homeViewModel);
         }
 
+        public ActionResult Details(int id)
+        {
+            var detailsViewModel = new DetailsViewModel
+            {
+                Product = _ctx.Products.FirstOrDefault(p => p.ProductId == id),
+
+            };
+            return View(detailsViewModel);
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
