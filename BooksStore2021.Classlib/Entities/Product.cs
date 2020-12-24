@@ -1,6 +1,7 @@
 namespace BooksStore2021.Classlib.Entities
 {
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json;
@@ -18,6 +19,7 @@ namespace BooksStore2021.Classlib.Entities
         [Required(ErrorMessage = "Please enter a description")]
         public string Description { get; set; }
 
+        [JsonIgnore]
         public byte[] ImageData { get; set; }
 
         public string ImageMimeType { get; set; }
@@ -34,30 +36,7 @@ namespace BooksStore2021.Classlib.Entities
         [StringLength(150, ErrorMessage = "Please enter a title of book")]
         public string Title { get; set; }
 
-        public override string ToString()
-        {
-
-            return PrettyJson(ToJSON());
-        }
-
-        private static string PrettyJson(string unPrettyJson)
-        {
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            };
-
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
-
-            return JsonSerializer.Serialize(jsonElement, options);
-        }
-
-
-
-        public string ToJSON()
-        {
-
-            return JsonSerializer.Serialize(this);
-        }
+        public override string ToString() => ToJSON();
+        public string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Newtonsoft.Json;
 
     public class ShoppingCart
     {
@@ -46,6 +47,9 @@
         {
             lineCollection.RemoveAll(l => l.Product.ProductId == product.ProductId);
         }
+
+        public override string ToString() => ToJSON();
+        public string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 
     public class CartLine
@@ -53,5 +57,9 @@
         public Product Product { get; set; }
 
         public int Quantity { get; set; }
+
+        public override string ToString() => ToJSON();
+        public string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
     }
 }
