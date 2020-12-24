@@ -5,6 +5,7 @@ namespace BooksStore2021.NunitTests.Entities
     using System;
     using System.Linq;
 
+    [TestFixture]
     public class TodoTests
     {
         [SetUp]
