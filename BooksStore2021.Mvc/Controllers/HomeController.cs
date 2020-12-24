@@ -42,10 +42,6 @@ namespace BooksStore2021.Mvc.Controllers
             return View(homeViewModel);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
