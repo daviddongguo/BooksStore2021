@@ -22,6 +22,7 @@ namespace BooksStore2021.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("MySqlConnection")));
+
             services.AddHttpContextAccessor();
             services.AddSession(Options =>
             {

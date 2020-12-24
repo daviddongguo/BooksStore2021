@@ -1,6 +1,8 @@
-﻿using BooksStore2021.Classlib.Services;
+﻿using BooksStore2021.Classlib.Entities;
+using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Models;
 using BooksStore2021.Mvc.Models.ViewModels;
+using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,6 +16,7 @@ namespace BooksStore2021.Mvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly EFDbContext _ctx;
+        public const string Session_Key = "cart";
 
         public readonly int PAGE_SIZE = 6;
         private readonly static List<string> _categories = new List<string>();
@@ -55,6 +58,25 @@ namespace BooksStore2021.Mvc.Controllers
 
             };
             return View(detailsViewModel);
+        }
+
+        [HttpPost, ActionName("Details")]
+        public ActionResult DetailsPost(int id)
+        {
+            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var sessionShoppinCart = HttpContext.Session.Get<ShoppingCart>(Session_Key);
+
+            if (sessionShoppinCart == null)
+            {
+                var shoppingcart = new ShoppingCart();
+                shoppingcart.AddItem(product, 1);
+                HttpContext.Session.Set<ShoppingCart>(Session_Key, shoppingcart);
+                return RedirectToAction(nameof(Index));
+            }
+
+            sessionShoppinCart.AddItem(product, 1);
+            HttpContext.Session.Set<ShoppingCart>("cart", sessionShoppinCart);
+            return RedirectToAction(nameof(Index));
         }
 
 
