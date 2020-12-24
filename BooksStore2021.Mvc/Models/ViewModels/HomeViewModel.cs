@@ -9,12 +9,6 @@ namespace BooksStore2021.Mvc.Models.ViewModels
     public class HomeViewModel
     {
         public IEnumerable<Product> Products { get; set; }
-        public IEnumerable<string> Categories { get {
-            var list = this.Products.Select(p => p.Category)
-                .Distinct()
-                .OrderBy(x => x);
-            return list;
-
-        } }
+        public IEnumerable<string> Categories { get; set; }
     }
 }
