@@ -16,8 +16,6 @@ namespace BooksStore2021.Mvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly EFDbContext _ctx;
-        public const string Session_Key = "cart";
-
         public readonly int PAGE_SIZE = 6;
         private readonly static List<string> _categories = new List<string>();
 
@@ -52,11 +50,25 @@ namespace BooksStore2021.Mvc.Controllers
 
         public ActionResult Details(int id)
         {
+            var dbProduct = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if (dbProduct == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             var detailsViewModel = new DetailsViewModel
             {
-                Product = _ctx.Products.FirstOrDefault(p => p.ProductId == id),
-
+                Product = dbProduct,
+                ExistsInCart = false,
             };
+
+            var IsProductInCartLine = getSessionShoppingCart()?.Lines
+                .FirstOrDefault(l => l.Product.ProductId == dbProduct.ProductId);
+            if(IsProductInCartLine != null)
+            {
+                detailsViewModel.ExistsInCart = true;
+            }
+
             return View(detailsViewModel);
         }
 
@@ -64,18 +76,31 @@ namespace BooksStore2021.Mvc.Controllers
         public ActionResult DetailsPost(int id)
         {
             var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
-            var sessionShoppinCart = HttpContext.Session.Get<ShoppingCart>(Session_Key);
+            var cart = getSessionShoppingCart();
 
-            if (sessionShoppinCart == null)
+            if (cart == null)
             {
                 var shoppingcart = new ShoppingCart();
                 shoppingcart.AddItem(product, 1);
-                HttpContext.Session.Set<ShoppingCart>(Session_Key, shoppingcart);
+                setSessionShoppingCart(shoppingcart);
                 return RedirectToAction(nameof(Index));
             }
 
-            sessionShoppinCart.AddItem(product, 1);
-            HttpContext.Session.Set<ShoppingCart>("cart", sessionShoppinCart);
+            cart.AddItem(product, 1);
+            setSessionShoppingCart(cart);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult RemoveFromCart(int id)
+        {
+            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product != null)
+            {
+                var cart = getSessionShoppingCart();
+                cart.RemoveLine(product);
+                HttpContext.Session.Set<ShoppingCart>("cart", cart);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -85,5 +110,16 @@ namespace BooksStore2021.Mvc.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public const string Session_Key = "cart";
+        private ShoppingCart getSessionShoppingCart()
+        {
+            return HttpContext.Session.Get<ShoppingCart>(Session_Key);
+        }
+        private void setSessionShoppingCart(ShoppingCart cart)
+        {
+            HttpContext.Session.Set<ShoppingCart>(Session_Key, cart);
+        }
+
     }
 }
