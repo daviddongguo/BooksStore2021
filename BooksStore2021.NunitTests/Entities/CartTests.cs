@@ -54,6 +54,35 @@ namespace BooksStore2021.NunitTests.Entities
 
         }
 
+        [TestCase]
+        public void Null_Check_Test()
+        {
+            // Arrange - create some test products
+            Product p1 = new Product { ProductId = 1, Title = "P1" };
+            Product p2 = new Product { ProductId = 2, Title = "P2" };
+            ShoppingCart cart = new ShoppingCart();
+            cart.AddItem(p1, 1);
+            cart.AddItem(p2, 1);
+            // Assert
+            var lines = cart?.Lines;
+            foreach (var line in lines ?? Enumerable.Empty<CartLine>())
+            {
+                System.Console.WriteLine(line.ToJSON());
+            }
+            var lineIncart = cart?.Lines.FirstOrDefault();
+            System.Console.WriteLine(lineIncart?.ToJSON());
+
+            // Null Cart
+            ShoppingCart nullCart = null;
+            lines = nullCart?.Lines;
+            foreach (var line in lines ?? Enumerable.Empty<CartLine>())
+            {
+                System.Console.WriteLine(line.ToJSON());
+            }
+            lineIncart = nullCart?.Lines.FirstOrDefault();
+            System.Console.WriteLine(lineIncart?.ToJSON());
+        }
+
 
 
         [TestCase()]
