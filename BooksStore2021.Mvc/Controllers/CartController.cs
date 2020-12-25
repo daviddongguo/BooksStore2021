@@ -1,17 +1,24 @@
 ﻿using BooksStore2021.Classlib.Entities;
+using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace BooksStore2021.Mvc.Controllers
 {
     public class CartController : Controller
     {
         // GET: CartController
+        private readonly EFDbContext _ctx;
+
+        public CartController(EFDbContext ctx)
+        {
+            _ctx = ctx;
+        }
         public ActionResult Index()
         {
-            var cart = HttpContext.Session.Get<ShoppingCart>("cart");
-            return View(cart);
+            return View(getSessionShoppingCart());
         }
 
         // GET: CartController/Details/5
@@ -62,25 +69,22 @@ namespace BooksStore2021.Mvc.Controllers
             }
         }
 
-        // GET: CartController/Delete/5
-        public ActionResult Delete(int id)
+
+        public ActionResult Remove(int id)
         {
-            return View();
+            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product != null)
+            {
+                var cart = getSessionShoppingCart();
+                cart.RemoveLine(product);
+                HttpContext.Session.Set<ShoppingCart>("cart", cart);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: CartController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+        private ShoppingCart getSessionShoppingCart(){
+            return HttpContext.Session.Get<ShoppingCart>("cart");
         }
     }
 }
