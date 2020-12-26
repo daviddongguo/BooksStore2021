@@ -1,8 +1,8 @@
 ﻿namespace BooksStore2021.Classlib.Entities
 {
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
-    using Newtonsoft.Json;
 
     public class ShoppingCart
     {
@@ -30,6 +30,22 @@
             {
                 line.Quantity += quantity;
             }
+        }
+
+        public void UpdateQuantityOfProduct(Product product, int quantity)
+        {
+            if (quantity <= -1)
+            {
+                return;
+            }
+            CartLine line = lineCollection
+            .Where(p => p.Product.ProductId == product.ProductId)
+            .FirstOrDefault();
+            if (line == null) // not found
+            {
+                return;
+            }
+            line.Quantity = quantity;
         }
 
         public void Clear()
