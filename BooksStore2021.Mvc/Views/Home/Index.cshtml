@@ -1,14 +1,30 @@
 ﻿@model BooksStore2021.Mvc.Models.ViewModels.HomeViewModel
+@using System
 
 @{
     ViewData["Title"] = "Home Page";
 }
 <div class="container">
   <div class="text-center">
-    <button class="btn btn-dark filter-button" data-filter="all"><a asp-action="Index" asp-controller="Home">ALL</a></button>
-    @foreach(string category in Model.Categories)
-    {
-      <button class="btn btn-outline-secondary filter-button" data-filter="@category"><a  sp-action="Index" asp-controller="Home" asp-route-queryCategory=@category>@category</a ></button>
+
+      @if(String.IsNullOrWhiteSpace(Model.CurrentCategory))
+      {
+          @Html.ActionLink("All", "Index", "Home", null, new { @class = "btn btn-info" })
+      }
+      else
+      {
+          @Html.ActionLink("All", "Index", "Home", null, new { @class = "btn btn-default" })
+      }
+      @foreach(string category in Model.Categories)
+      {
+        if(category == Model.CurrentCategory)
+        {
+          @Html.ActionLink(@category, "Index", "Home", new { category=@category }, new { @class = "btn btn-info" })
+        }
+        else
+        {
+          @Html.ActionLink(@category, "Index", "Home", new { category=@category }, new { @class = "btn btn-default" })
+        }
     }
 
   </div>
@@ -19,6 +35,19 @@
       <partial name="_IndividualProductCard", model=product />
     }
   </div>
+   <div  class="text-center">
+        @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+        {
+            if(i == Model.PagingInfo.CurrentPage)
+            {
+                @Html.ActionLink(@i.ToString(), "Index", "Home", new { category= @Model.CurrentCategory, page=@i }, new { @class = "btn btn-info" })
+            }
+            else
+            {
+                @Html.ActionLink(@i.ToString(), "Index", "Home", new { category= @Model.CurrentCategory, page=@i }, new { @class = "btn btn-default" })
+            }
+         }
+   </div>
 </div>
 
 @section Scripts{

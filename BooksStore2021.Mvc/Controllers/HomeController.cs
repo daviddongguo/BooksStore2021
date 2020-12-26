@@ -19,7 +19,7 @@ namespace BooksStore2021.Mvc.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly EFDbContext _ctx;
         public readonly int PAGE_SIZE = 6;
-        private readonly static List<string> _categories = new List<string>();
+        private readonly List<string> _categories;
 
         public HomeController(ILogger<HomeController> logger, EFDbContext ctx)
         {
@@ -29,26 +29,42 @@ namespace BooksStore2021.Mvc.Controllers
             {
                 var list = _ctx.Products.Select(p => p.Category).Distinct()
                     .OrderBy(p => p);
+                var repeatedList = new List<string>();
                 foreach (var catgory in list)
                 {
-                    _categories.AddRange(catgory.Split(" "));
+                    repeatedList.AddRange(catgory.ToLower().Split(" "));
                 }
+                _categories = repeatedList.Distinct().ToList();
             }
         }
 
-        public async Task<IActionResult> Index(string queryCategory = null, int page = 1)
+        public async Task<IActionResult> Index(string category = null, int page = 1)
         {
             HomeViewModel homeViewModel = new HomeViewModel
             {
-                Products =await _ctx.Products
-                .Where(p => String.IsNullOrEmpty(queryCategory) || p.Category.Contains(queryCategory))
+                Products = await _ctx.Products
+                .Where(p => String.IsNullOrEmpty(category) || p.Category.Contains(category))
                 .OrderBy(p => p.ProductId)
                 .Skip((page - 1) * PAGE_SIZE)
                 .Take(PAGE_SIZE)
                 .ToListAsync(),
                 Categories = _categories,
+
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = PAGE_SIZE,
+                    // Get the products remaind
+                    TotalItems = _ctx
+                            .Products
+                            .Where(p => category == null || p.Category == category)
+                            .Count()
+                },
+
+                CurrentCategory = category,
             };
             return View(homeViewModel);
+
         }
 
         public async Task<ActionResult> Details(int id)

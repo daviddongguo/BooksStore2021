@@ -162,7 +162,7 @@ namespace BooksStore2021.Mvc.Controllers
                 toUpdateProduct.Author = productViewModel.Product.Author;
                 toUpdateProduct.Price = productViewModel.Product.Price;
                 toUpdateProduct.Description = productViewModel.Product.Description;
-                toUpdateProduct.Category = productViewModel.Product.Category;
+                toUpdateProduct.Category = productViewModel.Product.Category.ToLower();
 
 
                 _ctx.Products.Update(toUpdateProduct);
