@@ -97,9 +97,10 @@ else
 <script type="text/javascript">
     function UpdateQuantity(productId, toUpdateQuantitty) {
     console.log('productId', productId);
-    console.log('toUpdateQuantitty', toUpdateQuantitty);
-    window.location.href = "/cart/Edit?productId=" + productId + "&toUpdateQuantity=" + toUpdateQuantitty;
-   document.getElementById("submitButton").style.visibility = "visible";
+    $.ajax({url: "/cart/Edit?productId=" + productId + "&toUpdateQuantity=" + toUpdateQuantitty,
+    success: function(result){
+    console.log("Updated quantity: " + toUpdateQuantitty);
+  }});
 };
 </script>
 

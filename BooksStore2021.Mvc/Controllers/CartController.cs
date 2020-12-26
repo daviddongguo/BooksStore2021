@@ -3,7 +3,9 @@ using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Controllers
 {
@@ -18,16 +20,16 @@ namespace BooksStore2021.Mvc.Controllers
         }
         public ActionResult Index()
         {
-            return View(getSessionShoppingCart());
+            return View(GetSessionShoppingCart());
         }
 
 
-        public ActionResult Edit(int productId, int toUpdateQuantity)
+        public async Task<IActionResult> Edit(int productId, int toUpdateQuantity)
         {
-            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == productId);
+            var product = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
             if (product != null && toUpdateQuantity >= 0)
             {
-                var cart = getSessionShoppingCart();
+                var cart = GetSessionShoppingCart();
                 cart.UpdateQuantityOfProduct(product, toUpdateQuantity);
                 HttpContext.Session.Set<ShoppingCart>("cart", cart);
             }
@@ -41,7 +43,7 @@ namespace BooksStore2021.Mvc.Controllers
             var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
             if (product != null)
             {
-                var cart = getSessionShoppingCart();
+                var cart = GetSessionShoppingCart();
                 cart.RemoveLine(product);
                 HttpContext.Session.Set<ShoppingCart>("cart", cart);
             }
@@ -49,7 +51,7 @@ namespace BooksStore2021.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private ShoppingCart getSessionShoppingCart()
+        private ShoppingCart GetSessionShoppingCart()
         {
             return HttpContext.Session.Get<ShoppingCart>("cart");
         }
