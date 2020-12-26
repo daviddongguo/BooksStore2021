@@ -38,9 +38,9 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
 
-        public ActionResult Remove(int id)
+        public async Task<IActionResult> Remove(int id)
         {
-            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var product = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product != null)
             {
                 var cart = GetSessionShoppingCart();

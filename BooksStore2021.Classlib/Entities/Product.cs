@@ -4,7 +4,6 @@ namespace BooksStore2021.Classlib.Entities
     using Newtonsoft.Json;
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Text.Json;
 
     public class Product
     {
