@@ -12,8 +12,8 @@ namespace BooksStore2021.NunitTests.Entities
         public void AddItemTest()
         {
             // Arrange - create some test products
-            Product p1 = new Product { ProductId = 1, Title = "P1" };
-            Product p2 = new Product { ProductId = 2, Title = "P2" };
+            Product p1 = new() { ProductId = 1, Title = "P1" };
+            Product p2 = new() { ProductId = 2, Title = "P2" };
             // Arrange - create a new cart
             ShoppingCart target = new ShoppingCart();
             // Act
@@ -28,6 +28,23 @@ namespace BooksStore2021.NunitTests.Entities
             Assert.AreEqual(target.Lines.Count(), 2);
             target.AddItem(p2, 1);
             Assert.AreEqual(target.Lines.Count(), 2);
+        }
+
+        [TestCase(5, 5)]
+        [TestCase(1, 1)]
+        [TestCase(0, 0)]
+        [TestCase(-1, 3)]
+        public void Update_Quantity_Of_Product(int toUpdateQuantity, int UpdatedQuantity)
+        {
+            // Arrange - create some test products
+            var originalQuantity = 3;
+            var p1 = new Product { ProductId = 1, Title = "P1" };
+            var cart = new ShoppingCart();
+            cart.AddItem(p1, originalQuantity);
+
+            cart.UpdateQuantityOfProduct(p1, toUpdateQuantity);
+            Assert.AreEqual(cart.Lines.FirstOrDefault().Quantity, UpdatedQuantity);
+            System.Console.WriteLine(toUpdateQuantity + "  --   " + cart.Lines.FirstOrDefault().Quantity);
         }
 
         [TestCase()]
