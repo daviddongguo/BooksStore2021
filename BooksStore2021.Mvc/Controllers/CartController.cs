@@ -21,52 +21,18 @@ namespace BooksStore2021.Mvc.Controllers
             return View(getSessionShoppingCart());
         }
 
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: CartController/Create
-        public ActionResult Create()
+        public ActionResult Edit(int productId, int toUpdateQuantity)
         {
-            return View();
-        }
+            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null && toUpdateQuantity >= 0)
+            {
+                var cart = getSessionShoppingCart();
+                cart.UpdateQuantityOfProduct(product, toUpdateQuantity);
+                HttpContext.Session.Set<ShoppingCart>("cart", cart);
+            }
 
-        // POST: CartController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -83,7 +49,8 @@ namespace BooksStore2021.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private ShoppingCart getSessionShoppingCart(){
+        private ShoppingCart getSessionShoppingCart()
+        {
             return HttpContext.Session.Get<ShoppingCart>("cart");
         }
     }
