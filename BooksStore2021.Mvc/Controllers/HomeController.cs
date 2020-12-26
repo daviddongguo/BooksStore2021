@@ -4,11 +4,13 @@ using BooksStore2021.Mvc.Models;
 using BooksStore2021.Mvc.Models.ViewModels;
 using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Controllers
 {
@@ -34,23 +36,24 @@ namespace BooksStore2021.Mvc.Controllers
             }
         }
 
-        public IActionResult Index(string queryCategory = null, int page = 1)
+        public async Task<IActionResult> Index(string queryCategory = null, int page = 1)
         {
             HomeViewModel homeViewModel = new HomeViewModel
             {
-                Products = _ctx.Products
+                Products =await _ctx.Products
                 .Where(p => String.IsNullOrEmpty(queryCategory) || p.Category.Contains(queryCategory))
                 .OrderBy(p => p.ProductId)
                 .Skip((page - 1) * PAGE_SIZE)
-                .Take(PAGE_SIZE),
+                .Take(PAGE_SIZE)
+                .ToListAsync(),
                 Categories = _categories,
             };
             return View(homeViewModel);
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            var dbProduct = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var dbProduct = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -64,7 +67,7 @@ namespace BooksStore2021.Mvc.Controllers
 
             var IsProductInCartLine = getSessionShoppingCart()?.Lines
                 .FirstOrDefault(l => l.Product.ProductId == dbProduct.ProductId);
-            if(IsProductInCartLine != null)
+            if (IsProductInCartLine != null)
             {
                 detailsViewModel.ExistsInCart = true;
             }
@@ -73,9 +76,9 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
         [HttpPost, ActionName("Details")]
-        public ActionResult DetailsPost(int id)
+        public async Task<ActionResult> DetailsPost(int id)
         {
-            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var product = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             var cart = getSessionShoppingCart();
 
             if (cart == null)
@@ -89,6 +92,11 @@ namespace BooksStore2021.Mvc.Controllers
             cart.AddItem(product, 1);
             setSessionShoppingCart(cart);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> AddToCart(int id)
+        {
+            return await DetailsPost(id);
         }
 
         public ActionResult RemoveFromCart(int id)
