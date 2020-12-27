@@ -26,6 +26,17 @@ namespace BooksStore2021.Mvc.Controllers
 
         public IActionResult Checkout()
         {
+            var cart = GetSessionShoppingCart();
+            if (cart != null)
+            {
+                cart.CleanLine();
+            }
+            if (cart == null || cart?.Lines.Count() == 0)
+            {
+                // ModelState.AddModelError("", "Sorry, your cart is empty!");
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(new ShippingDetails());
         }
 
@@ -42,7 +53,9 @@ namespace BooksStore2021.Mvc.Controllers
 
             if (cart == null || cart?.Lines.Count() == 0)
             {
-                ModelState.AddModelError("", "Sorry, your cart is empty!");
+                // ModelState.AddModelError("", "Sorry, your cart is empty!");
+                return RedirectToAction(nameof(Index));
+
             }
 
             if (ModelState.IsValid)
