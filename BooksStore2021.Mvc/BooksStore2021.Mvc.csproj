@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="MySqlConnector" Version="0.69.1" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
   <PropertyGroup>
