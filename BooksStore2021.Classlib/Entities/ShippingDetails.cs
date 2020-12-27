@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace BooksStore2021.Classlib.Entities
 {
@@ -19,5 +20,8 @@ namespace BooksStore2021.Classlib.Entities
         [Required(ErrorMessage = "Please enter a country name")]
         public string Country { get; set; }
         public bool GiftWrap { get; set; }
+
+        public override string ToString() => ToJSON();
+        public string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

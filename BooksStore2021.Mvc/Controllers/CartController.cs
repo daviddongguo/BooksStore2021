@@ -4,6 +4,7 @@ using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,9 +19,44 @@ namespace BooksStore2021.Mvc.Controllers
         {
             _ctx = ctx;
         }
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View(GetSessionShoppingCart());
+        }
+
+        public IActionResult Checkout()
+        {
+            return View(new ShippingDetails());
+        }
+
+
+        [HttpPost]
+        public IActionResult Checkout(ShippingDetails shippingDetails)
+        {
+            var cart = GetSessionShoppingCart();
+            if (cart != null)
+            {
+                // Remove the line if quantity is zero
+                cart.CleanLine();
+            }
+
+            if (cart == null || cart?.Lines.Count() == 0)
+            {
+                ModelState.AddModelError("", "Sorry, your cart is empty!");
+            }
+
+            if (ModelState.IsValid)
+            {
+                //orderProcessor.ProcessOrder(cart, shippingDetails);
+                ViewBag.Cart = cart?.ToString();
+                ViewBag.ShippingDetails = shippingDetails?.ToString();
+                cart.Clear();
+                return View("Complete", ViewBag);
+            }
+            else
+            {
+                return View(shippingDetails);
+            }
         }
 
 
@@ -36,7 +72,6 @@ namespace BooksStore2021.Mvc.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
 
         public async Task<IActionResult> Remove(int id)
         {

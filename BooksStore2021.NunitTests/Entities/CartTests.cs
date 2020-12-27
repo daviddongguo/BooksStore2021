@@ -100,6 +100,26 @@ namespace BooksStore2021.NunitTests.Entities
             System.Console.WriteLine(lineIncart?.ToJSON());
         }
 
+        [TestCase]
+        public void Clean_Line_Test()
+        {
+            // Arrange - create some test products
+            Product p1 = new Product { ProductId = 1, Title = "P1" };
+            Product p2 = new Product { ProductId = 2, Title = "P2" };
+            ShoppingCart cart = new ShoppingCart();
+            cart.AddItem(p1, 3);
+            cart.AddItem(p2, 4);
+            // Assert
+            Assert.That(cart.Lines.Count, Is.EqualTo(2));
+
+            cart.UpdateQuantityOfProduct(p1, 0);
+            Assert.That(cart.Lines.Count, Is.EqualTo(2));
+
+            cart.CleanLine();
+            Assert.That(cart.Lines.Count, Is.EqualTo(1));
+
+        }
+
 
 
         [TestCase()]

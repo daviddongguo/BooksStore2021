@@ -25,16 +25,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        <li class="nav-item">
+                        <li class="navbar-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product Admin</a>
                         </li>
-                        <li>
+                        <li class="navbar-item navbar-right">
                           @if(HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart") != null){
                             <a asp-action="Index" asp-controller="Cart" class="nav-link">
                               @{
                                 var shoppingCart = HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart");
                               }
-                              <i class="fas fa-shopping-cart"></i> &nbsp; (@shoppingCart.Lines.Count()_@string.Format("{0:c0}", shoppingCart.ComputeTotalValue()))
+                              <i class="fas fa-shopping-cart"></i> &nbsp; (@shoppingCart.Lines.Sum(l => l.Quantity) item(s)_@string.Format("{0:c0}", shoppingCart.ComputeTotalValue()))
                             </a>
                             }else
                             {

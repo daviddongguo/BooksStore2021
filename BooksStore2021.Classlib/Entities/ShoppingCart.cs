@@ -61,7 +61,20 @@
         //
         public void RemoveLine(Product product)
         {
+            if (this.lineCollection == null)
+            {
+                return;
+            }
             lineCollection.RemoveAll(l => l.Product.ProductId == product.ProductId);
+        }
+
+        public void CleanLine()
+        {
+            if (this.lineCollection == null)
+            {
+                return;
+            }
+            lineCollection.RemoveAll(l => l.Quantity <= 0);
         }
 
         public override string ToString() => ToJSON();
