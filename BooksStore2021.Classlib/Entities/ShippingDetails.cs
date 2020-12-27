@@ -7,6 +7,7 @@ namespace BooksStore2021.Classlib.Entities
     {
         [Required(ErrorMessage = "Please enter a name")]
         public string Name { get; set; }
+        public string Email { get; set; }
         [Required(ErrorMessage = "Please enter the first address line")]
         [Display(Name = "Main address")]
         public string Line1 { get; set; }
