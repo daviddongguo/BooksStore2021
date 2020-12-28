@@ -152,12 +152,14 @@ namespace BooksStore2021.Mvc.Controllers
                 await TrySignup(client, email, "customer");
 
             }
-            var orderid = await CreateOrder(client, ticketId);
+            var orderId = await CreateOrder(client, ticketId);
+
+            return RedirectToPage("http://www.david-wu.xyz/orders/" + orderId);
 
 
 
             // Display the page to pay
-            ViewBag.Cart = orderid?.ToString();
+            ViewBag.Cart = orderId?.ToString();
             ViewBag.ShippingDetails = shippingDetails?.ToString();
             return View("Complete", ViewBag);
         }
