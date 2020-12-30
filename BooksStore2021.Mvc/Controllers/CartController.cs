@@ -4,6 +4,7 @@ using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -17,10 +18,12 @@ namespace BooksStore2021.Mvc.Controllers
     {
         // GET: CartController
         private readonly EFDbContext _ctx;
+        private readonly IConfiguration _config;
 
-        public CartController(EFDbContext ctx)
+        public CartController(EFDbContext ctx, IConfiguration config)
         {
             _ctx = ctx;
+            _config = config;
         }
 
         public IActionResult Index()
@@ -129,7 +132,7 @@ namespace BooksStore2021.Mvc.Controllers
             client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 
             // Generate a ticket
-            if (!(await TrySignin(client, "admin@booksstore.com", "admin")))
+            if (!(await TrySignin(client, _config["BooksStoreAdmin:Email"], _config["BooksStoreAdmin:Password"])))
             {
 
             }
@@ -154,7 +157,7 @@ namespace BooksStore2021.Mvc.Controllers
             }
             var orderId = await CreateOrder(client, ticketId);
 
-            return RedirectToPage("http://www.david-wu.xyz/orders/" + orderId);
+            //return RedirectToPage("http://www.david-wu.xyz/orders/" + orderId);
 
 
 

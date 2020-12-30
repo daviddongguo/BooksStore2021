@@ -21,7 +21,8 @@ namespace BooksStore2021.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("MySqlConnection")));
+            var connectingString = Configuration["ConnectionStrings:MySqlConnection"];
+            services.AddDbContext<EFDbContext>(x => x.UseMySQL(connectingString));
 
             services.AddHttpContextAccessor();
             services.AddSession(Options =>
