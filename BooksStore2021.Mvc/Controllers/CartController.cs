@@ -159,7 +159,7 @@ namespace BooksStore2021.Mvc.Controllers
 
 
             // Display the page to pay
-            ViewBag.Cart = orderId?.ToString();
+            ViewBag.Cart = orderId.ToString();
             ViewBag.ShippingDetails = shippingDetails?.ToString();
             return View("Complete", ViewBag);
         }
