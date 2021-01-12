@@ -1,9 +1,10 @@
 using BooksStore2021.Classlib.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BooksStore2021.Classlib.Services
 {
-    public class EFDbContext : DbContext
+    public class EFDbContext : IdentityDbContext
     {
         public EFDbContext(DbContextOptions<EFDbContext> options) : base(options)
         {
