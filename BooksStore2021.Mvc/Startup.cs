@@ -1,7 +1,10 @@
 using System;
 using BooksStore2021.Classlib.Services;
+using BooksStore2021.Mvc.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +25,9 @@ namespace BooksStore2021.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             var connectingString = Configuration["ConnectionStrings:MySqlConnection"];
-            services.AddDbContext<EFDbContext>(x => x.UseMySQL(connectingString));
+            services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("MySqlConnection"),  b => b.MigrationsAssembly("BooksStore2021.Mvc")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<EFDbContext>();
 
             services.AddHttpContextAccessor();
             services.AddSession(Options =>
@@ -31,7 +36,11 @@ namespace BooksStore2021.Mvc
                 Options.Cookie.HttpOnly = true;
                 Options.Cookie.IsEssential = true;
             });
+
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,12 +61,16 @@ namespace BooksStore2021.Mvc
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseAuthorization();
 
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
