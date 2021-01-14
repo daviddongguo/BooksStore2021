@@ -66,10 +66,10 @@ namespace BooksStore2021.Mvc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            //if(!await _roleManager.RoleExistsAsync(EnviornmentalVariables.AdminRole))
+            //if (!await _roleManager.RoleExistsAsync(EnvironmentalVariables.AdminRole))
             //{
-            //    await _roleManager.CreateAsync(new IdentityRole(EnviornmentalVariables.AdminRole));
-            //    await _roleManager.CreateAsync(new IdentityRole(EnviornmentalVariables.CustomerRole));
+            //    await _roleManager.CreateAsync(new IdentityRole(EnvironmentalVariables.AdminRole));
+            //    await _roleManager.CreateAsync(new IdentityRole(EnvironmentalVariables.CustomerRole));
             //}
 
             ReturnUrl = returnUrl;
@@ -86,6 +86,7 @@ namespace BooksStore2021.Mvc.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    //await _userManager.AddToRoleAsync(user, EnvironmentalVariables.AdminRole);
                     if (User.IsInRole(EnvironmentalVariables.AdminRole))
                     {
                         // Add an administor if admin has logged in
