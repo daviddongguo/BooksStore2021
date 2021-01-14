@@ -24,7 +24,7 @@ jobs:
       env: 
         SUPER_SECRET: ${{ secrets.SuperSecret }}
       run: echo "$SUPER_SECRET" >appsettings.json 
-      working-directory: BooksStore2021.Mvc      
+      working-directory: ./BooksStore2021.Mvc      
       
     - name: Build with dotnet
       run: dotnet build --configuration Release
@@ -32,7 +32,7 @@ jobs:
     
     - name: Test with dotnet
       run: dotnet test -l "console;verbosity=detailed"
-      working-directory: BooksStore2021.NunitTests
+      working-directory: ./BooksStore2021.NunitTests
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
