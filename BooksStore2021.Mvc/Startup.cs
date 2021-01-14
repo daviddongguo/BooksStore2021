@@ -27,7 +27,10 @@ namespace BooksStore2021.Mvc
             var connectingString = Configuration["ConnectionStrings:MySqlConnection"];
             services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("MySqlConnection"),  b => b.MigrationsAssembly("BooksStore2021.Mvc")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<EFDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<EFDbContext>();
 
             services.AddHttpContextAccessor();
             services.AddSession(Options =>

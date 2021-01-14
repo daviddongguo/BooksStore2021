@@ -19,6 +19,10 @@
     <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>88445118-5253-4df4-953f-2725196c20e3</UserSecretsId>

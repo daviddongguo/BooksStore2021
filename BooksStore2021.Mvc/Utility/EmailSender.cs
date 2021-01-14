@@ -10,7 +10,6 @@ namespace BooksStore2021.Mvc.Utility
     public class EmailSender : IEmailSender
     {
         private readonly IConfiguration _configuration;
-
         public MailJetSettings _mailJetSettings { get; set; }
 
         public EmailSender(IConfiguration configuration)
@@ -26,46 +25,43 @@ namespace BooksStore2021.Mvc.Utility
         public async Task Execute(string email, string subject, string body)
         {
             _mailJetSettings = _configuration.GetSection("MailJet").Get<MailJetSettings>();
-
-            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey)
-            {
-                Version = ApiVersion.V3_1,
-            };
+            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey);
+            //{
+            //    Version = ApiVersion.V3_1,
+            //};
             MailjetRequest request = new MailjetRequest
             {
                 Resource = Send.Resource,
             }
-             .Property(Send.Messages, new JArray {
-     new JObject {
-      {
-       "From",
-       new JObject {
-        {"Email", "dotnetmastery@protonmail.com"},
-        {"Name", "Ben"}
-       }
-      }, {
-       "To",
-       new JArray {
-        new JObject {
-         {
-          "Email",
-          email
-         }, {
-          "Name",
-          "DotNetMastery"
-         }
-        }
-       }
-      }, {
-       "Subject",
-       subject
-      }, {
-       "HTMLPart",
-       body
-      }
-     }
-             });
-            await client.PostAsync(request);
+             .Property(Send.Messages, new JArray
+             {
+                new JObject
+                {
+                    {
+                        "From",
+                        new JObject
+                        {
+                            {"Email", "davidwu2021@protonmail.com"},
+                            {"Name", "David"}
+                        }
+                    },
+                    {
+                        "To",
+                        new JArray
+                        {
+                            new JObject
+                            {
+                                {"Email", email},
+                            }
+                        }
+                    }, {"Subject", subject},
+                    {
+                        "HTMLPart",
+                        body
+                    }
+                }
+            });
+            var response = await client.PostAsync(request);
         }
     }
 }

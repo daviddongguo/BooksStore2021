@@ -1,14 +1,20 @@
 ﻿using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Classlib.Services;
+using BooksStore2021.Mvc.Models.ViewModels;
 using BooksStore2021.Mvc.Utility;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,16 +25,99 @@ namespace BooksStore2021.Mvc.Controllers
         // GET: CartController
         private readonly EFDbContext _ctx;
         private readonly IConfiguration _config;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public CartController(EFDbContext ctx, IConfiguration config)
+
+        public CartController
+            (EFDbContext ctx, 
+            IConfiguration config, 
+            IWebHostEnvironment webHostEnvironment,
+            UserManager<IdentityUser> userManager,
+            IEmailSender emailSender)
         {
             _ctx = ctx;
             _config = config;
+            _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
         {
             return View(GetSessionShoppingCart());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Index")]
+        public IActionResult IndexPost()
+        {
+            return RedirectToAction(nameof(Summary));
+        }
+
+        [BindProperty]
+        public ShoppingCartUserViewModel ShoppingCartUserViewModel { get; set; }
+
+
+        public async Task<IActionResult> Summary()
+        {
+            ShoppingCartUserViewModel = new ShoppingCartUserViewModel()
+            {
+                User = await GetCurrentUser(),
+                ShoppingCart = GetSessionShoppingCart(),
+            };
+
+            return View(ShoppingCartUserViewModel);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public async Task<IActionResult> SummaryPost(ShoppingCartUserViewModel ShoppingCartUserViewModel)
+        {
+            var pathToTemplate = new StringBuilder();
+            pathToTemplate.Append(_webHostEnvironment.WebRootPath);
+            pathToTemplate.Append(Path.DirectorySeparatorChar);
+            pathToTemplate.Append("templates");
+            pathToTemplate.Append(Path.DirectorySeparatorChar);
+            pathToTemplate.Append("Inquiry.html");
+
+            var subject = "New Inquiry";
+            using StreamReader sr = System.IO.File.OpenText(pathToTemplate.ToString());
+            string HtmlBody = sr.ReadToEnd();
+
+            StringBuilder productListSB = new StringBuilder();
+            foreach (var cartLine in ShoppingCartUserViewModel.ShoppingCart.Lines)
+            {
+                productListSB.Append($" - Name: { cartLine.Product.Title} <span style='font-size:14px;'> (Price: {cartLine.Product.Price})</span><br />");
+            }
+
+            string messageBody = string.Format(HtmlBody,
+                ShoppingCartUserViewModel?.User.Email ?? "",
+                productListSB.ToString() ?? "");
+
+            await _emailSender.SendEmailAsync(EnvironmentalVariables.EmailAdmin, subject, messageBody);
+
+            return RedirectToAction(nameof(InquiryConfirmation));
+        }
+
+        public IActionResult InquiryConfirmation()
+        {
+            HttpContext.Session.Clear();
+            return View();
+        }
+
+        private async Task<IdentityUser> GetCurrentUser()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if(claim == null)
+            {
+                return null;
+            }
+            return await _userManager.FindByIdAsync(claim.Value);
         }
 
         public IActionResult Checkout()
