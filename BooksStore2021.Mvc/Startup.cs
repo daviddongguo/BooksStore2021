@@ -25,7 +25,7 @@ namespace BooksStore2021.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             var connectingString = Configuration["ConnectionStrings:MySqlConnection"];
-            services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("MySqlConnection"),  b => b.MigrationsAssembly("BooksStore2021.Mvc")));
+            services.AddDbContext<EFDbContext>(x => x.UseMySQL(Configuration.GetConnectionString("LocalMySqlConnection"),  b => b.MigrationsAssembly("BooksStore2021.Mvc")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders()
