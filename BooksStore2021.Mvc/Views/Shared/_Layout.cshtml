@@ -25,22 +25,35 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        <li class="navbar-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product Admin</a>
-                        </li>
+                        @if (User.IsInRole(EnvironmentalVariables.AdminRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Content Management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create Admin User</a>
+                                </div>
+                            </li>
+                        }
+
                         <li class="navbar-item navbar-right">
-                          @if(HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart") != null){
-                            <a asp-action="Index" asp-controller="Cart" class="nav-link">
-                              @{
-                                var shoppingCart = HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart");
-                              }
-                              <i class="fas fa-shopping-cart"></i> &nbsp; (@shoppingCart.Lines.Sum(l => l.Quantity) item(s)_@string.Format("{0:c0}", shoppingCart.ComputeTotalValue()))
-                            </a>
-                            }else
+                            @if (HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart") != null)
                             {
-                              <a href="#" class="nav-link">
-                                <i class="fas fa-shopping-cart"></i> &nbsp; (0)
-                              </a>
+                                <a asp-action="Index" asp-controller="Cart" class="nav-link">
+                                    @{
+                                        var shoppingCart = HttpContextAccessor.HttpContext.Session.Get<ShoppingCart>("cart");
+                                    }
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@shoppingCart.Lines.Sum(l => l.Quantity) item(s)_@string.Format("{0:c0}", shoppingCart.ComputeTotalValue()))
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                </a>
 
                             }
                         </li>
