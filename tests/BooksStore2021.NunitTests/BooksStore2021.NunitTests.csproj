@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BooksStore2021.Mvc\BooksStore2021.Mvc.csproj" />
-    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
+    <ProjectReference Include="..\..\src\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
+    <ProjectReference Include="..\..\src\BooksStore2021.Mvc\BooksStore2021.Mvc.csproj" />
   </ItemGroup>
 
 </Project>

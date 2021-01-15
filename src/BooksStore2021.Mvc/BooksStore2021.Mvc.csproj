@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Mailjet.Api" Version="1.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
@@ -21,6 +17,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
