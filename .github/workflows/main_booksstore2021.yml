@@ -20,23 +20,17 @@ jobs:
       with:
         dotnet-version: '5.0.x'
         
-    - name: Replace connectionstring in .json
-      env: 
-        SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: echo "$SUPER_SECRET" > appsettings.json 
-      working-directory: ./BooksStore2021.Mvc      
-      
     - name: Build with dotnet
       run: dotnet build --configuration Release
-      working-directory: ./BooksStore2021.Mvc
+      working-directory: ./src/BooksStore2021.Mvc
     
     - name: Test with dotnet
       run: dotnet test -l "console;verbosity=detailed"
-      working-directory: ./BooksStore2021.NunitTests
+      working-directory: ./tests/BooksStore2021.NunitTests
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-      working-directory: ./BooksStore2021.Mvc
+      working-directory: ./src/BooksStore2021.Mvc
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
