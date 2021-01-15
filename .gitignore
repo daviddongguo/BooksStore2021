@@ -349,4 +349,3 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 BooksStore2021.Mvc/Migrations
-BooksStore2021.Mvc/appsettings.json
