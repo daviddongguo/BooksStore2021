@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksStore2021.Mvc", "src\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksStore2021.NunitTests", "tests\BooksStore2021.NunitTests\BooksStore2021.NunitTests.csproj", "{711D7082-53C1-40A7-A2F6-EAE828A1A82E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksStore2021.Webapi", "src\BooksStore2021.Webapi\BooksStore2021.Webapi.csproj", "{BB0F27E4-8368-402C-8430-63B78E6E382B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{711D7082-53C1-40A7-A2F6-EAE828A1A82E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{711D7082-53C1-40A7-A2F6-EAE828A1A82E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{711D7082-53C1-40A7-A2F6-EAE828A1A82E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB0F27E4-8368-402C-8430-63B78E6E382B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB0F27E4-8368-402C-8430-63B78E6E382B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB0F27E4-8368-402C-8430-63B78E6E382B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB0F27E4-8368-402C-8430-63B78E6E382B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
