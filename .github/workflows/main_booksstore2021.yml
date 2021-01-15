@@ -20,12 +20,6 @@ jobs:
       with:
         dotnet-version: '5.0.x'
         
-    - name: Replace connectionstring in .json
-      env: 
-        SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: echo "$SUPER_SECRET" > appsettings.json 
-      working-directory: ./BooksStore2021.Mvc      
-      
     - name: Build with dotnet
       run: dotnet build --configuration Release
       working-directory: ./BooksStore2021.Mvc
