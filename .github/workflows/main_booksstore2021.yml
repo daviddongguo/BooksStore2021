@@ -23,7 +23,7 @@ jobs:
     - name: Replace connectionstring in .json
       env: 
         SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: echo "$SUPER_SECRET" >appsettings.json 
+      run: echo "$SUPER_SECRET" > appsettings.json 
       working-directory: ./BooksStore2021.Mvc      
       
     - name: Build with dotnet
