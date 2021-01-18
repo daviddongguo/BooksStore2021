@@ -89,7 +89,7 @@ namespace BooksStore2021.Mvc.Controllers
             string HtmlBody = sr.ReadToEnd();
 
             StringBuilder productListSB = new StringBuilder();
-            foreach (var cartLine in ShoppingCartUserViewModel.ShoppingCart.Lines)
+            foreach (var cartLine in GetSessionShoppingCart()?.Lines ?? Enumerable.Empty<CartLine>())
             {
                 productListSB.Append($" - Name: { cartLine.Product.Title} <span style='font-size:14px;'> (Price: {cartLine.Product.Price})</span><br />");
             }
@@ -98,7 +98,7 @@ namespace BooksStore2021.Mvc.Controllers
                 ShoppingCartUserViewModel?.User.Email ?? "",
                 productListSB.ToString() ?? "");
 
-            await _emailSender.SendEmailAsync(WC.EmailAdmin, subject, messageBody);
+            await _emailSender.SendEmailAsync(ShoppingCartUserViewModel.User.Email, subject, messageBody);
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }
