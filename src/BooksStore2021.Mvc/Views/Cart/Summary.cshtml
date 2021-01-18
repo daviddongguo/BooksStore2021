@@ -1,6 +1,7 @@
 ﻿@model BooksStore2021.Mvc.Models.ViewModels.ShoppingCartUserViewModel
 
 <form method="post">
+    <input type="hidden" asp-for="ShoppingCart.Lines" />
     <br />
     <div class="backgroundWhiteBorder">
         <div class="container">
@@ -28,8 +29,8 @@
                                         <label>Email</label>
                                     </div>
                                     <div class="col-9">
-                                        <div class="form-control" >
-                                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                                        <div class="form-control">
+                                            <input asp-for="User.Email" required type="text" class="form-control" />
                                         </div>
                                     </div>
                                 </div>

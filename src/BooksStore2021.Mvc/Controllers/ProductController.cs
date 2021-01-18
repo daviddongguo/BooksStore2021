@@ -1,6 +1,7 @@
 ﻿using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Models.ViewModels;
+using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using System.Linq;
 
 namespace BooksStore2021.Mvc.Controllers
 {
-    [Authorize(Roles = EnvironmentalVariables.AdminRole)]
+    [Authorize(Roles = WC.AdminRole)]
     public class ProductController : Controller
     {
         private readonly EFDbContext _ctx;

@@ -1,6 +1,5 @@
-using System;
 using BooksStore2021.Classlib.Services;
-using BooksStore2021.Mvc.Utility;
+using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace BooksStore2021.Mvc
 {

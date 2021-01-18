@@ -2,7 +2,7 @@
 using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Models;
 using BooksStore2021.Mvc.Models.ViewModels;
-using BooksStore2021.Mvc.Utility;
+using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

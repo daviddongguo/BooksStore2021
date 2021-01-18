@@ -1,7 +1,7 @@
 ﻿using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Classlib.Services;
 using BooksStore2021.Mvc.Models.ViewModels;
-using BooksStore2021.Mvc.Utility;
+using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -98,7 +98,7 @@ namespace BooksStore2021.Mvc.Controllers
                 ShoppingCartUserViewModel?.User.Email ?? "",
                 productListSB.ToString() ?? "");
 
-            await _emailSender.SendEmailAsync(EnvironmentalVariables.EmailAdmin, subject, messageBody);
+            await _emailSender.SendEmailAsync(WC.EmailAdmin, subject, messageBody);
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }

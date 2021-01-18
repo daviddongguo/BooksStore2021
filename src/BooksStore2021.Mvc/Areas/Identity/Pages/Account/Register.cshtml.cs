@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using BooksStore2021.Utility;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -87,14 +88,14 @@ namespace BooksStore2021.Mvc.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     //await _userManager.AddToRoleAsync(user, EnvironmentalVariables.AdminRole);
-                    if (User.IsInRole(EnvironmentalVariables.AdminRole))
+                    if (User.IsInRole(WC.AdminRole))
                     {
                         // Add an administor if admin has logged in
-                        await _userManager.AddToRoleAsync(user, EnvironmentalVariables.AdminRole);
+                        await _userManager.AddToRoleAsync(user, WC.AdminRole);
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, EnvironmentalVariables.CustomerRole);
+                        await _userManager.AddToRoleAsync(user, WC.CustomerRole);
                     }
 
 
@@ -119,7 +120,7 @@ namespace BooksStore2021.Mvc.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        if (User.IsInRole(EnvironmentalVariables.AdminRole))
+                        if (User.IsInRole(WC.AdminRole))
                         {
                             return RedirectToAction("Index");
                         }
