@@ -24,6 +24,21 @@
     <ProjectReference Include="..\BooksStore2021.Utility\BooksStore2021.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\fontawesome\webfonts\fa-solid-900.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\dust_scratches.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\patio.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\tile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>88445118-5253-4df4-953f-2725196c20e3</UserSecretsId>
