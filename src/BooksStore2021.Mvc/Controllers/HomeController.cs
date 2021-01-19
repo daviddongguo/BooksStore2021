@@ -47,7 +47,6 @@ namespace BooksStore2021.Mvc.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PAGE_SIZE,
-                    // Get the products remaind
                     TotalItems = _ctx
                             .Products
                             .Where(p => category == null || p.Category == category)
@@ -63,7 +62,7 @@ namespace BooksStore2021.Mvc.Controllers
         public async Task<ActionResult> Details(int id)
         {
             //var dbProduct = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
-            var dbProduct =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            var dbProduct = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return RedirectToAction(nameof(Index));
