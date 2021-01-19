@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BooksStore2021.Classlib.Abstract;
+using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Controllers
 {
@@ -16,18 +18,20 @@ namespace BooksStore2021.Mvc.Controllers
     public class ProductController : Controller
     {
         private readonly EFDbContext _ctx;
+        private readonly IProductRepository _rep;
 
-        public ProductController(EFDbContext ctx)
+        public ProductController(EFDbContext ctx, IProductRepository rep)
         {
             _ctx = ctx;
+            _rep = rep;
         }
 
 
         // GET: ProductController
         public ActionResult Index()
         {
-            IEnumerable<Product> objList = _ctx.Products;
-            return View(objList);
+            //IEnumerable<Product> objList = _ctx.Products;
+            return View(_rep.GetAll());
         }
 
         // GET: ProductController/Details/5
@@ -79,16 +83,13 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
         //GET - UPSERT
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
 
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 Product = new Product(),
-                CategorySelectList = _ctx.Products
-                .Select(x => x.Category)
-                .Distinct()
-                .OrderBy(x => x)
+                CategorySelectList = _rep.GetAllCategories()
                 .Select(i => new SelectListItem
                 {
                     Text = i,
@@ -102,7 +103,7 @@ namespace BooksStore2021.Mvc.Controllers
                 return View(productViewModel);
             }
 
-            productViewModel.Product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            productViewModel.Product = await  _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (productViewModel.Product == null)
             {
                 return NotFound();
@@ -116,7 +117,7 @@ namespace BooksStore2021.Mvc.Controllers
         //POST - UPSERT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(ProductViewModel productViewModel, IFormFile image = null)
+        public async Task<IActionResult> Upsert(ProductViewModel productViewModel, IFormFile image = null)
         {
             if (!ModelState.IsValid)
             {
@@ -146,7 +147,7 @@ namespace BooksStore2021.Mvc.Controllers
             else
             {
                 //updating
-                var toUpdateProduct = _ctx.Products.FirstOrDefault(u => u.ProductId == productViewModel.Product.ProductId);
+                var toUpdateProduct =await _rep.FirstOrDefaultAsync(u => u.ProductId == productViewModel.Product.ProductId);
                 if (image?.Length > 0)
                 {
                     productViewModel.Product.ImageMimeType = image.ContentType;

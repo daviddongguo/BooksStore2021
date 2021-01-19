@@ -1,5 +1,6 @@
-﻿using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Classlib.Abstract;
 using BooksStore2021.Classlib.Concrete;
+using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Mvc.Models;
 using BooksStore2021.Mvc.Models.ViewModels;
 using BooksStore2021.Utility;
@@ -18,24 +19,16 @@ namespace BooksStore2021.Mvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly EFDbContext _ctx;
+        private readonly IProductRepository _rep;
         public readonly int PAGE_SIZE = 6;
         private readonly List<string> _categories;
 
-        public HomeController(ILogger<HomeController> logger, EFDbContext ctx)
+        public HomeController(ILogger<HomeController> logger, EFDbContext ctx, IProductRepository rep)
         {
             _logger = logger;
             _ctx = ctx;
-            if (_categories?.FirstOrDefault() == null)
-            {
-                var list = _ctx.Products.Select(p => p.Category).Distinct()
-                    .OrderBy(p => p);
-                var repeatedList = new List<string>();
-                foreach (var catgory in list)
-                {
-                    repeatedList.AddRange(catgory.ToLower().Split(" "));
-                }
-                _categories = repeatedList.Distinct().ToList();
-            }
+            _rep = rep;
+            _categories = _rep.GetAllCategories() as List<string>;
         }
 
         public async Task<IActionResult> Index(string category = null, int page = 1)
@@ -43,11 +36,11 @@ namespace BooksStore2021.Mvc.Controllers
             HomeViewModel homeViewModel = new HomeViewModel
             {
                 Products = await _ctx.Products
-                .Where(p => String.IsNullOrEmpty(category) || p.Category.Contains(category))
-                .OrderBy(p => p.ProductId)
-                .Skip((page - 1) * PAGE_SIZE)
-                .Take(PAGE_SIZE)
-                .ToListAsync(),
+                    .Where(p => String.IsNullOrEmpty(category) || p.Category.Contains(category))
+                    .OrderBy(p => p.ProductId)
+                    .Skip((page - 1) * PAGE_SIZE)
+                    .Take(PAGE_SIZE)
+                    .ToListAsync(),
                 Categories = _categories,
 
                 PagingInfo = new PagingInfo
@@ -69,7 +62,8 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var dbProduct = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            //var dbProduct = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            var dbProduct =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return RedirectToAction(nameof(Index));

@@ -1,3 +1,4 @@
+using BooksStore2021.Classlib.Abstract;
 using BooksStore2021.Classlib.Concrete;
 using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace BooksStore2021.Mvc
             });
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IProductRepository, EFProductRepository>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
