@@ -2,7 +2,7 @@ using BooksStore2021.Classlib.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BooksStore2021.Classlib.Services
+namespace BooksStore2021.Classlib.Concrete
 {
     public class EFDbContext : IdentityDbContext
     {
