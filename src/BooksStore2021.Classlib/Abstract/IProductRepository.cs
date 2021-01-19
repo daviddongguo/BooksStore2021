@@ -8,6 +8,6 @@ namespace BooksStore2021.Classlib.Abstract
     {
         void Update(Product product);
 
-        IEnumerable<SelectListItem> GetAllDropdownList(string str);
+        IEnumerable<string> GetAllCategories();
     }
 }
