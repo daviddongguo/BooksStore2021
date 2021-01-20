@@ -28,7 +28,7 @@ namespace BooksStore2021.Mvc.Controllers
             _logger = logger;
             _ctx = ctx;
             _rep = rep;
-            _categories = _rep.GetAllCategories() as List<string>;
+            _categories = _rep.GetAllCategories().GetAwaiter().GetResult() as List<string>;
         }
 
         public async Task<IActionResult> Index(string category = null, int page = 1)

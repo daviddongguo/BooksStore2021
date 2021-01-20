@@ -1,5 +1,6 @@
 ﻿using BooksStore2021.Classlib.Abstract;
 using BooksStore2021.Classlib.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace BooksStore2021.Classlib.Concrete
             _ctx = ctx;
         }
 
-        public IEnumerable<string> GetAllCategories()
+        public async Task<IEnumerable<string>> GetAllCategories()
         {
             var categorieslist = _ctx
                 .Products
@@ -27,7 +28,7 @@ namespace BooksStore2021.Classlib.Concrete
                 .OrderBy(p => p);
 
             var repeatedList = new List<string>();
-            foreach (var catgory in categorieslist)
+            foreach (var catgory in await categorieslist.ToListAsync())
             {
                 repeatedList.AddRange(catgory.Split(" "));
             }
@@ -35,9 +36,6 @@ namespace BooksStore2021.Classlib.Concrete
             return repeatedList.Distinct().ToList();
         }
 
-        public void Update(Product product)
-        {
-            _ctx.Products.Update(product);
-        }
+
     }
 }

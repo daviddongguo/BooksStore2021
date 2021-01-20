@@ -20,14 +20,10 @@ namespace BooksStore2021.Classlib.Concrete
             this.dbSet = _ctx.Set<T>();
         }
 
-        public void Add(T entity)
-        {
-            dbSet.Add(entity);
-        }
 
-        public T Find(int id)
+        public async Task<T> Find(int id)
         {
-            return dbSet.Find(id);
+            return await dbSet.FindAsync(id);
         }
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
@@ -51,7 +47,7 @@ namespace BooksStore2021.Classlib.Concrete
             return await query.FirstOrDefaultAsync();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -73,9 +69,17 @@ namespace BooksStore2021.Classlib.Concrete
             {
                 query = query.AsNoTracking();
             }
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
+        public void Add(T entity)
+        {
+            dbSet.Add(entity);
+        }
+        public void Update(T entity)
+        {
+            dbSet.Update(entity);
+        }
         public void Remove(T entity)
         {
             dbSet.Remove(entity);
@@ -86,9 +90,9 @@ namespace BooksStore2021.Classlib.Concrete
             dbSet.RemoveRange(entity);
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _ctx.SaveChanges();
+            await _ctx.SaveChangesAsync();
         }
     }
 }

@@ -1,15 +1,14 @@
-﻿using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Classlib.Abstract;
 using BooksStore2021.Classlib.Concrete;
+using BooksStore2021.Classlib.Entities;
 using BooksStore2021.Mvc.Models.ViewModels;
 using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BooksStore2021.Classlib.Abstract;
 using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Controllers
@@ -89,7 +88,7 @@ namespace BooksStore2021.Mvc.Controllers
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 Product = new Product(),
-                CategorySelectList = _rep.GetAllCategories()
+                CategorySelectList =(await _rep.GetAllCategories())                
                 .Select(i => new SelectListItem
                 {
                     Text = i,
@@ -103,7 +102,7 @@ namespace BooksStore2021.Mvc.Controllers
                 return View(productViewModel);
             }
 
-            productViewModel.Product = await  _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            productViewModel.Product = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (productViewModel.Product == null)
             {
                 return NotFound();
@@ -147,7 +146,7 @@ namespace BooksStore2021.Mvc.Controllers
             else
             {
                 //updating
-                var toUpdateProduct =await _rep.FirstOrDefaultAsync(u => u.ProductId == productViewModel.Product.ProductId);
+                var toUpdateProduct = await _rep.FirstOrDefaultAsync(u => u.ProductId == productViewModel.Product.ProductId);
                 if (image?.Length > 0)
                 {
                     productViewModel.Product.ImageMimeType = image.ContentType;
