@@ -27,16 +27,16 @@ namespace BooksStore2021.Mvc.Controllers
 
 
         // GET: ProductController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //IEnumerable<Product> objList = _ctx.Products;
-            return View(_rep.GetAll());
+            return View(await _rep.GetAllAsync());
         }
 
         // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            return View(await _rep.FindAsync(id));
         }
 
         // GET: ProductController/Create
@@ -61,9 +61,9 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
         // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            return View(await _rep.FindAsync(id));
         }
 
         // POST: ProductController/Edit/5
@@ -109,7 +109,6 @@ namespace BooksStore2021.Mvc.Controllers
             }
 
             return View(productViewModel);
-
         }
 
 
@@ -177,13 +176,13 @@ namespace BooksStore2021.Mvc.Controllers
 
 
         // GET: ProductController/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            var product = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var product =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -194,16 +193,17 @@ namespace BooksStore2021.Mvc.Controllers
         // POST: ProductController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteProduct(int? id)
+        public async Task<IActionResult> DeleteProduct(int? id)
         {
-            var dbProduct = _ctx.Products.FirstOrDefault(p => p.ProductId == id);
+            var dbProduct =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return NotFound();
             }
 
-            _ctx.Products.Remove(dbProduct);
-            _ctx.SaveChanges();
+            _rep.Remove(dbProduct);
+            await _rep.SaveAsync();
+
             return RedirectToAction("Index");
         }
 

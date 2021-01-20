@@ -8,13 +8,13 @@ namespace BooksStore2021.Classlib.Abstract
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> Find(int id);
+        Task<T> FindAsync(int id);
         Task<T> FirstOrDefaultAsync(
             Expression<Func<T, bool>> filter = null,
             string includeProperties = null,
             bool isTracking = true
             );
-        Task<IEnumerable<T>> GetAll(
+        Task<IEnumerable<T>> GetAllAsync(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = null,
@@ -26,6 +26,6 @@ namespace BooksStore2021.Classlib.Abstract
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
 
-        Task Save();
+        Task SaveAsync();
     }
 }

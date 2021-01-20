@@ -21,7 +21,7 @@ namespace BooksStore2021.Classlib.Concrete
         }
 
 
-        public async Task<T> Find(int id)
+        public async Task<T> FindAsync(int id)
         {
             return await dbSet.FindAsync(id);
         }
@@ -47,7 +47,7 @@ namespace BooksStore2021.Classlib.Concrete
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -90,7 +90,7 @@ namespace BooksStore2021.Classlib.Concrete
             dbSet.RemoveRange(entity);
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _ctx.SaveChangesAsync();
         }
