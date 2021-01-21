@@ -1,5 +1,6 @@
 using BooksStore2021.Classlib.Abstract;
 using BooksStore2021.Classlib.Concrete;
+using BooksStore2021.Classlib.Initializer;
 using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,13 +45,17 @@ namespace BooksStore2021.Mvc
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IProductRepository, EFProductRepository>();
+            services.AddScoped<IOrderRepository, EFOrderRepository>();
+            services.AddScoped<IShippingDetailsRepository, EFShippingDetailsRepository>();
+            services.AddScoped<IShoppingCartRepository, EFShoppingCartRepository>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -69,6 +74,7 @@ namespace BooksStore2021.Mvc
 
             app.UseAuthentication();
             app.UseAuthorization();
+            dbInitializer.Initialize();
 
             app.UseAuthorization();
 
