@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace BooksStore2021.Classlib.Concrete
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class EFRepository<T> : IRepository<T> where T : class
     {
         private readonly EFDbContext _ctx;
         internal DbSet<T> dbSet;
 
-        public Repository(EFDbContext ctx)
+        public EFRepository(EFDbContext ctx)
         {
             _ctx = ctx;
             this.dbSet = _ctx.Set<T>();

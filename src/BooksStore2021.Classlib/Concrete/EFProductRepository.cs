@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace BooksStore2021.Classlib.Concrete
 {
-    public class EFProductRepository : Repository<Product>, IProductRepository
+    public class EFProductRepository : EFRepository<Product>, IProductRepository
     {
         private readonly EFDbContext _ctx;
 
