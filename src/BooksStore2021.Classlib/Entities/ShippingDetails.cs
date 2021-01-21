@@ -5,7 +5,8 @@ namespace BooksStore2021.Classlib.Entities
 {
     public class ShippingDetails
     {
-        //[Required(ErrorMessage = "Please enter a name")]
+        [Key]
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; } = "guest@email.com";
         //[Required(ErrorMessage = "Please enter the first address line")]

@@ -11,13 +11,13 @@ namespace BooksStore2021.Classlib.Concrete
 {
     public class EFRepository<T> : IRepository<T> where T : class
     {
-        private readonly EFDbContext _ctx;
+        private readonly EFDbContext _db;
         internal DbSet<T> dbSet;
 
-        public EFRepository(EFDbContext ctx)
+        public EFRepository(EFDbContext db)
         {
-            _ctx = ctx;
-            this.dbSet = _ctx.Set<T>();
+            _db = db;
+            this.dbSet = _db.Set<T>();
         }
 
 
@@ -92,7 +92,7 @@ namespace BooksStore2021.Classlib.Concrete
 
         public async Task SaveAsync()
         {
-            await _ctx.SaveChangesAsync();
+            await _db.SaveChangesAsync();
         }
     }
 }

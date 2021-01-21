@@ -12,16 +12,16 @@ namespace BooksStore2021.Classlib.Concrete
 {
     public class EFProductRepository : EFRepository<Product>, IProductRepository
     {
-        private readonly EFDbContext _ctx;
+        private readonly EFDbContext _db;
 
-        public EFProductRepository(EFDbContext ctx) : base(ctx)
+        public EFProductRepository(EFDbContext db) : base(db)
         {
-            _ctx = ctx;
+            _db = db;
         }
 
         public async Task<IEnumerable<string>> GetAllCategories()
         {
-            var categorieslist = _ctx
+            var categorieslist = _db
                 .Products
                 .Select(p => p.Category)
                 .Distinct()
