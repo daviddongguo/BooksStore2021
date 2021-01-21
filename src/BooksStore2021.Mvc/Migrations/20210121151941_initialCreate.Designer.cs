@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BooksStore2021.Mvc.Migrations
 {
     [DbContext(typeof(EFDbContext))]
-    [Migration("20210114153427_initialCreate")]
+    [Migration("20210121151941_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,6 +18,60 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.CartLine", b =>
+                {
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ShoppingCartId")
+                        .HasColumnType("bigint");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("CartLines");
+                });
+
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.Order", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("OrderStatus")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ShippingDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<long>("ShippingDetailsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ShoppingCartId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShippingDetailsId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("Orders");
+                });
 
             modelBuilder.Entity("BooksStore2021.Classlib.Entities.Product", b =>
                 {
@@ -39,7 +93,7 @@ namespace BooksStore2021.Mvc.Migrations
                         .HasColumnType("text");
 
                     b.Property<byte[]>("ImageData")
-                        .HasColumnType("varbinary(4000)");
+                        .HasColumnType("longblob");
 
                     b.Property<string>("ImageMimeType")
                         .HasColumnType("text");
@@ -57,10 +111,65 @@ namespace BooksStore2021.Mvc.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.ShippingDetails", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("GiftWrap")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Line1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Line2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Line3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("State")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Zip")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShippingDetails");
+                });
+
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.ShoppingCart", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
             modelBuilder.Entity("BooksStore2021.Classlib.Entities.Todo", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<bool>("IsComplete")
                         .HasColumnType("tinyint(1)");
@@ -76,7 +185,7 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -113,7 +222,7 @@ namespace BooksStore2021.Mvc.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.HasKey("Id");
 
@@ -125,7 +234,7 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -200,7 +309,7 @@ namespace BooksStore2021.Mvc.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.HasKey("Id");
 
@@ -212,17 +321,17 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -234,10 +343,10 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -249,13 +358,13 @@ namespace BooksStore2021.Mvc.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(76)");
+                        .HasColumnType("varchar(67)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -263,6 +372,34 @@ namespace BooksStore2021.Mvc.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.CartLine", b =>
+                {
+                    b.HasOne("BooksStore2021.Classlib.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("BooksStore2021.Classlib.Entities.ShoppingCart", "ShoppingCart")
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BooksStore2021.Classlib.Entities.Order", b =>
+                {
+                    b.HasOne("BooksStore2021.Classlib.Entities.ShippingDetails", "ShippingDetails")
+                        .WithMany()
+                        .HasForeignKey("ShippingDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BooksStore2021.Classlib.Entities.ShoppingCart", "ShoppingCart")
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

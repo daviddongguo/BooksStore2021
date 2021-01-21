@@ -9,7 +9,7 @@ namespace BooksStore2021.Mvc.Controllers
 {
     public class TodoesController : Controller
     {
-        private EFDbContext _ctx;
+        private EFDbContext _db;
 
         public TodoesController()
         {
@@ -17,16 +17,16 @@ namespace BooksStore2021.Mvc.Controllers
              .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
              .Options;
 
-            _ctx = new EFDbContext(options);
+            _db = new EFDbContext(options);
 
-            if (_ctx.Todoes.FirstOrDefault() == null)
+            if (_db.Todoes.FirstOrDefault() == null)
             {
-                _ctx.Todoes.Add(new Todo
+                _db.Todoes.Add(new Todo
                 {
                     Id = "18kxytxr0cak4ay1nj4d",
                     Title = "18kxytxr0cak4ay1nj4d" + DateTime.Now,
                 });
-                _ctx.Add(new Todo
+                _db.Add(new Todo
                 {
                     Id = "228kxytxr0cak4ay1nj4d",
                     Title = "228kxytxr0cak4ay1nj4d" + DateTime.Now,
@@ -34,7 +34,7 @@ namespace BooksStore2021.Mvc.Controllers
                 }); ;
                 try
                 {
-                    _ctx.SaveChanges();
+                    _db.SaveChanges();
                 }
                 catch (System.Exception)
                 {
@@ -45,7 +45,7 @@ namespace BooksStore2021.Mvc.Controllers
         // GET: TodoesController1
         public ActionResult Index()
         {
-            var Todoes = _ctx.Todoes;
+            var Todoes = _db.Todoes;
             return View(Todoes);
         }
 

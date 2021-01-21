@@ -8,11 +8,11 @@ namespace BooksStore2021.NunitTests.Services
     [TestFixture]
     class LocalDbTodoTests
     {
-        private EFDbContext _ctx;
+        private EFDbContext _db;
         [SetUp]
         public void SetUp()
         {
-            _ctx = LocalInMemoryDbContextFactory.GetContext();
+            _db = LocalInMemoryDbContextFactory.GetContext();
         }
 
         [TestCase()]
@@ -24,7 +24,7 @@ namespace BooksStore2021.NunitTests.Services
         [TestCase()]
         public void GetAllTodoes_ReturnsAllTodoes()
         {
-            var Todoes = _ctx.Todoes;
+            var Todoes = _db.Todoes;
 
             foreach (var t in Todoes)
             {

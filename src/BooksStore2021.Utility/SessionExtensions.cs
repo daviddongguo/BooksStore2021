@@ -8,7 +8,7 @@ namespace BooksStore2021.Utility
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            var str = JsonConvert.SerializeObject(value);
+            var str = JsonConvert.SerializeObject(value, Formatting.Indented);
             session.SetString(key, str);
         }
 
