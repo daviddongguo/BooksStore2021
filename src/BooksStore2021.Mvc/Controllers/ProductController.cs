@@ -17,19 +17,19 @@ namespace BooksStore2021.Mvc.Controllers
     public class ProductController : Controller
     {
         private readonly EFDbContext _ctx;
-        private readonly IProductRepository _rep;
+        private readonly IProductRepository _productRep;
 
         public ProductController(EFDbContext ctx, IProductRepository rep)
         {
             _ctx = ctx;
-            _rep = rep;
+            _productRep = rep;
         }
 
 
         // GET: ProductController
         public async Task<IActionResult> Index()
         {
-            return View(await _rep.GetAllAsync());
+            return View(await _productRep.GetAllAsync());
         }
 
         //GET - UPSERT
@@ -39,7 +39,7 @@ namespace BooksStore2021.Mvc.Controllers
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 Product = new Product(),
-                CategorySelectList = (await _rep.GetAllCategories())
+                CategorySelectList = (await _productRep.GetAllCategories())
                 .Select(i => new SelectListItem
                 {
                     Text = i,
@@ -53,7 +53,7 @@ namespace BooksStore2021.Mvc.Controllers
                 return View(productViewModel);
             }
 
-            productViewModel.Product = await _rep.FindAsync(id.GetValueOrDefault());
+            productViewModel.Product = await _productRep.FindAsync(id.GetValueOrDefault());
             if (productViewModel.Product == null)
             {
                 return NotFound();
@@ -89,11 +89,12 @@ namespace BooksStore2021.Mvc.Controllers
                     productViewModel.Product.ImageData = null;
                 }
 
-                _rep.Add(productViewModel.Product);
+                _productRep.Add(productViewModel.Product);
             }
             else
             {
                 //updating
+                var dbProduct = await _productRep.FirstOrDefaultAsync(p => p.ProductId == productViewModel.Product.ProductId, isTracking: false);
                 if (image?.Length > 0)
                 {
                     productViewModel.Product.ImageMimeType = image.ContentType;
@@ -105,11 +106,16 @@ namespace BooksStore2021.Mvc.Controllers
 
                     productViewModel.Product.ImageData = fileBytes;
                 }
+                else
+                {
+                    productViewModel.Product.ImageMimeType = dbProduct.ImageMimeType;
+                    productViewModel.Product.ImageData = dbProduct.ImageData;
+                }
 
-                _rep.Update(productViewModel.Product);
+                _productRep.Update(productViewModel.Product);
             }
 
-            await _rep.SaveAsync();
+            await _productRep.SaveAsync();
             return RedirectToAction("Index");
         }
 
@@ -121,7 +127,7 @@ namespace BooksStore2021.Mvc.Controllers
             {
                 return NotFound();
             }
-            var product = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _productRep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -134,14 +140,14 @@ namespace BooksStore2021.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(int? id)
         {
-            var dbProduct = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            var dbProduct = await _productRep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return NotFound();
             }
 
-            _rep.Remove(dbProduct);
-            await _rep.SaveAsync();
+            _productRep.Remove(dbProduct);
+            await _productRep.SaveAsync();
 
             return RedirectToAction("Index");
         }
