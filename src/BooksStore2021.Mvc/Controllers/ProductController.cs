@@ -75,16 +75,16 @@ namespace BooksStore2021.Mvc.Controllers
             if (productViewModel.Product.ProductId == 0)
             {
                 //Creating
-                if (image.Length > 0)
+                if (image?.Length > 0)
                 {
-                    productViewModel.Product.ImageMimeType = image.ContentType;
                     using var fileStream = image.OpenReadStream();
                     using var memoryStream = new MemoryStream();
                     fileStream.CopyTo(memoryStream);
                     // Convert image to byte and save to database
                     byte[] fileBytes = memoryStream.ToArray();
 
-                    productViewModel.Product.ImageData = null;
+                    productViewModel.Product.ImageMimeType = image.ContentType;
+                    productViewModel.Product.ImageData = fileBytes;
                 }
 
                 _productRep.Add(productViewModel.Product);
@@ -95,13 +95,13 @@ namespace BooksStore2021.Mvc.Controllers
                 var dbProduct = await _productRep.FirstOrDefaultAsync(p => p.ProductId == productViewModel.Product.ProductId, isTracking: false);
                 if (image?.Length > 0)
                 {
-                    productViewModel.Product.ImageMimeType = image.ContentType;
                     using var fileStream = image.OpenReadStream();
                     using var memoryStream = new MemoryStream();
                     fileStream.CopyTo(memoryStream);
                     // Convert image to byte and save to database
                     byte[] fileBytes = memoryStream.ToArray();
 
+                    productViewModel.Product.ImageMimeType = image.ContentType;
                     productViewModel.Product.ImageData = fileBytes;
                 }
                 else
