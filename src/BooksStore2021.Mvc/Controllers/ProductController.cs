@@ -16,12 +16,10 @@ namespace BooksStore2021.Mvc.Controllers
     [Authorize(Roles = WC.AdminRole)]
     public class ProductController : Controller
     {
-        private readonly EFDbContext _ctx;
         private readonly IProductRepository _productRep;
 
-        public ProductController(EFDbContext ctx, IProductRepository rep)
+        public ProductController(IProductRepository rep)
         {
-            _ctx = ctx;
             _productRep = rep;
         }
 
@@ -154,9 +152,10 @@ namespace BooksStore2021.Mvc.Controllers
 
         public FileContentResult GetImageByProductId(int productId)
         {
-            Product product = _ctx
-                .Products
-                .FirstOrDefault(p => p.ProductId == productId && p.ImageData != null && p.ImageMimeType != null);
+            Product product = _productRep
+                .FirstOrDefaultAsync(p => p.ProductId == productId && p.ImageData != null && p.ImageMimeType != null)
+                .GetAwaiter()
+                .GetResult();
 
             if (product?.ImageData == null || product?.ImageMimeType == null)
             {

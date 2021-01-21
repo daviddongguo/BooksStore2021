@@ -18,24 +18,22 @@ namespace BooksStore2021.Mvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly EFDbContext _ctx;
-        private readonly IProductRepository _rep;
+        private readonly IProductRepository _productRep;
         public readonly int PAGE_SIZE = 6;
         private readonly List<string> _categories;
 
-        public HomeController(ILogger<HomeController> logger, EFDbContext ctx, IProductRepository rep)
+        public HomeController(ILogger<HomeController> logger, IProductRepository rep)
         {
             _logger = logger;
-            _ctx = ctx;
-            _rep = rep;
-            _categories = _rep.GetAllCategories().GetAwaiter().GetResult() as List<string>;
+            _productRep = rep;
+            _categories = _productRep.GetAllCategories().GetAwaiter().GetResult() as List<string>;
         }
 
         public async Task<IActionResult> Index(string category = null, int page = 1)
         {
             HomeViewModel homeViewModel = new HomeViewModel
             {
-                Products = (await _rep.GetAllAsync(p => String.IsNullOrEmpty(category) || p.Category.Contains(category)))
+                Products = (await _productRep.GetAllAsync(p => String.IsNullOrEmpty(category) || p.Category.Contains(category)))
                     .OrderBy(p => p.ProductId)
                     .Skip((page - 1) * PAGE_SIZE)
                     .Take(PAGE_SIZE)
@@ -46,9 +44,10 @@ namespace BooksStore2021.Mvc.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PAGE_SIZE,
-                    TotalItems = _ctx
-                            .Products
-                            .Where(p => category == null || p.Category == category)
+                    TotalItems = _productRep
+                            .GetAllAsync(p => category == null || p.Category == category)
+                            .GetAwaiter()
+                            .GetResult()
                             .Count()
                 },
 
@@ -60,7 +59,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var dbProduct = await _rep.FindAsync(id);
+            var dbProduct = await _productRep.FindAsync(id);
             if (dbProduct == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -78,7 +77,7 @@ namespace BooksStore2021.Mvc.Controllers
         [HttpPost, ActionName("Details")]
         public async Task<ActionResult> DetailsPost(long id)
         {
-            var product = await _rep.FindAsync(id);
+            var product = await _productRep.FindAsync(id);
             var cart = getSessionShoppingCart();
 
             if (cart == null)
@@ -101,7 +100,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<ActionResult> RemoveFromCart(long id)
         {
-            var product =await _rep.FindAsync(id);
+            var product = await _productRep.FindAsync(id);
             if (product != null)
             {
                 var cart = getSessionShoppingCart();
