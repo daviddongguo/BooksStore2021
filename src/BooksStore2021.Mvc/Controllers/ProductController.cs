@@ -29,56 +29,7 @@ namespace BooksStore2021.Mvc.Controllers
         // GET: ProductController
         public async Task<IActionResult> Index()
         {
-            //IEnumerable<Product> objList = _ctx.Products;
             return View(await _rep.GetAllAsync());
-        }
-
-        // GET: ProductController/Details/5
-        public async Task<IActionResult> Details(int id)
-        {
-            return View(await _rep.FindAsync(id));
-        }
-
-        // GET: ProductController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProductController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Edit/5
-        public async Task<IActionResult> Edit(int id)
-        {
-            return View(await _rep.FindAsync(id));
-        }
-
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         //GET - UPSERT
@@ -88,7 +39,7 @@ namespace BooksStore2021.Mvc.Controllers
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 Product = new Product(),
-                CategorySelectList =(await _rep.GetAllCategories())                
+                CategorySelectList = (await _rep.GetAllCategories())
                 .Select(i => new SelectListItem
                 {
                     Text = i,
@@ -102,7 +53,7 @@ namespace BooksStore2021.Mvc.Controllers
                 return View(productViewModel);
             }
 
-            productViewModel.Product = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            productViewModel.Product = await _rep.FindAsync(id.GetValueOrDefault());
             if (productViewModel.Product == null)
             {
                 return NotFound();
@@ -129,48 +80,36 @@ namespace BooksStore2021.Mvc.Controllers
                 if (image.Length > 0)
                 {
                     productViewModel.Product.ImageMimeType = image.ContentType;
-
-                    // Convert image to byte and save to database
-                    byte[] fileBytes = null;
                     using var fileStream = image.OpenReadStream();
                     using var memoryStream = new MemoryStream();
                     fileStream.CopyTo(memoryStream);
-                    fileBytes = memoryStream.ToArray();
+                    // Convert image to byte and save to database
+                    byte[] fileBytes = memoryStream.ToArray();
 
-                    productViewModel.Product.ImageData = fileBytes;
+                    productViewModel.Product.ImageData = null;
                 }
 
-                _ctx.Products.Add(productViewModel.Product);
+                _rep.Add(productViewModel.Product);
             }
             else
             {
                 //updating
-                var toUpdateProduct = await _rep.FirstOrDefaultAsync(u => u.ProductId == productViewModel.Product.ProductId);
                 if (image?.Length > 0)
                 {
                     productViewModel.Product.ImageMimeType = image.ContentType;
-
-                    // Convert image to byte and save to database
-                    byte[] fileBytes = null;
                     using var fileStream = image.OpenReadStream();
                     using var memoryStream = new MemoryStream();
                     fileStream.CopyTo(memoryStream);
-                    fileBytes = memoryStream.ToArray();
+                    // Convert image to byte and save to database
+                    byte[] fileBytes = memoryStream.ToArray();
 
-                    toUpdateProduct.ImageData = fileBytes;
+                    productViewModel.Product.ImageData = fileBytes;
                 }
 
-                toUpdateProduct.Title = productViewModel.Product.Title;
-                toUpdateProduct.Author = productViewModel.Product.Author;
-                toUpdateProduct.Price = productViewModel.Product.Price;
-                toUpdateProduct.Description = productViewModel.Product.Description;
-                toUpdateProduct.Category = productViewModel.Product.Category.ToLower();
-
-
-                _ctx.Products.Update(toUpdateProduct);
+                _rep.Update(productViewModel.Product);
             }
 
-            _ctx.SaveChanges();
+            await _rep.SaveAsync();
             return RedirectToAction("Index");
         }
 
@@ -182,7 +121,7 @@ namespace BooksStore2021.Mvc.Controllers
             {
                 return NotFound();
             }
-            var product =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -195,7 +134,7 @@ namespace BooksStore2021.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(int? id)
         {
-            var dbProduct =await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
+            var dbProduct = await _rep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (dbProduct == null)
             {
                 return NotFound();

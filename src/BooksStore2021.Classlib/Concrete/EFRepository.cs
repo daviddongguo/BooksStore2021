@@ -21,7 +21,7 @@ namespace BooksStore2021.Classlib.Concrete
         }
 
 
-        public async Task<T> FindAsync(int id)
+        public async Task<T> FindAsync(long id)
         {
             return await dbSet.FindAsync(id);
         }

@@ -9,14 +9,14 @@
         </div>
         @if(Model.ImageData != null && Model.ImageMimeType != null)
         {
-          <img class="card-img-top img-fluid d-block mx-auto mb-3" height="200" src="@String.Format("data:image/png; base64, {0}", Convert.ToBase64String(Model.ImageData))" alt="Card image cap">
+          <img class="card-img-top img-fluid d-block mx-auto mb-3" style="height:400px" src="@String.Format("data:image/png; base64, {0}", Convert.ToBase64String(Model.ImageData))" alt="Card image cap">
         }
 
         <div class="card-body p-1 px-3 row">
           @foreach(string categoryStr in Model.Category.Split(' '))
           {
                 <div class="col-6">
-                <span class="badge p-2 border w-100" style="background-color:lavenderblush"><a asp-action="Index" asp-controller="Home" asp-route-category=@categoryStr>@categoryStr</a></span>
+                <span class="badge p-2 border w-100 text-dark" style="background-color:lavenderblush"><a asp-action="Index" asp-controller="Home" asp-route-category=@categoryStr>@categoryStr</a></span>
                 </div>
           }
             <div class="col-12 p-1">
