@@ -17,27 +17,32 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BooksStore2021.Classlib.Abstract;
 
 namespace BooksStore2021.Mvc.Controllers
 {
     public class CartController : Controller
     {
         // GET: CartController
-        private readonly EFDbContext _ctx;
+        private readonly IProductRepository _productRep;
+        private readonly IShoppingCartRepository _shoppingCartRep;
         private readonly IConfiguration _config;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly UserManager<IdentityUser> _userManager;
 
 
         public CartController
-            (EFDbContext ctx, 
-            IConfiguration config, 
+            (IProductRepository productRep,
+            IShoppingCartRepository shoppingCartRep,
+
+            IConfiguration config,
             IWebHostEnvironment webHostEnvironment,
             UserManager<IdentityUser> userManager,
             IEmailSender emailSender)
         {
-            _ctx = ctx;
+            _productRep = productRep;
+            _shoppingCartRep = shoppingCartRep;
             _config = config;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
@@ -63,15 +68,18 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<IActionResult> Summary()
         {
+            var user = await GetCurrentUser();
+            var shoppingCart = GetSessionShoppingCart();
+            shoppingCart.Email = user.Email;
             ShoppingCartUserViewModel = new ShoppingCartUserViewModel()
             {
-                User = await GetCurrentUser(),
-                ShoppingCart = GetSessionShoppingCart(),
+                User = user,
+                ShoppingCart = shoppingCart,
             };
 
             return View(ShoppingCartUserViewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
@@ -89,8 +97,17 @@ namespace BooksStore2021.Mvc.Controllers
             string HtmlBody = sr.ReadToEnd();
 
             StringBuilder productListSB = new StringBuilder();
-            foreach (var cartLine in GetSessionShoppingCart()?.Lines ?? Enumerable.Empty<CartLine>())
+            var shoppingCart = GetSessionShoppingCart();
+            if (shoppingCart == null)
             {
+                return RedirectToAction(nameof(Summary));
+            }
+
+            shoppingCart.Email = (await GetCurrentUser()).Email;
+
+            foreach (var cartLine in shoppingCart.Lines)
+            {
+                cartLine.Product = await _productRep.FindAsync(cartLine.Product.ProductId);
                 productListSB.Append($" - Name: { cartLine.Product.Title} <span style='font-size:14px;'> (Price: {cartLine.Product.Price})</span><br />");
             }
 
@@ -98,7 +115,11 @@ namespace BooksStore2021.Mvc.Controllers
                 ShoppingCartUserViewModel?.User.Email ?? "",
                 productListSB.ToString() ?? "");
 
+            // Send a email && Save to database
             await _emailSender.SendEmailAsync(ShoppingCartUserViewModel.User.Email, subject, messageBody);
+
+            _shoppingCartRep.Add(shoppingCart);
+            await _shoppingCartRep.SaveAsync();
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }
@@ -113,7 +134,7 @@ namespace BooksStore2021.Mvc.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if(claim == null)
+            if (claim == null)
             {
                 return null;
             }
@@ -291,7 +312,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<IActionResult> Edit(int productId, int toUpdateQuantity)
         {
-            var product = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+            var product = await _productRep.FirstOrDefaultAsync(p => p.ProductId == productId);
             if (product != null && toUpdateQuantity >= 0)
             {
                 var cart = GetSessionShoppingCart();
@@ -304,7 +325,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            var product = await _ctx.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _productRep.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product != null)
             {
                 var cart = GetSessionShoppingCart();
@@ -317,7 +338,8 @@ namespace BooksStore2021.Mvc.Controllers
 
         private ShoppingCart GetSessionShoppingCart()
         {
-            return HttpContext.Session.Get<ShoppingCart>("cart");
+            var cart = HttpContext.Session.Get<ShoppingCart>("cart");
+            return cart;
         }
     }
 }
