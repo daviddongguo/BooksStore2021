@@ -114,7 +114,7 @@ namespace BooksStore2021.Mvc.Controllers
             StringBuilder productListSB = new StringBuilder();
             foreach (var cartLine in shoppingCart.Lines)
             {
-                cartLine.Product = await _productRep.FindAsync(cartLine.Product.ProductId);
+                cartLine.Product = await _productRep.FindByIdAsync(cartLine.Product.ProductId);
                 productListSB.Append($" - Name: { cartLine.Product.Title} <span style='font-size:14px;'> (Price: {cartLine.Product.Price})</span><br />");
             }
 
@@ -131,7 +131,7 @@ namespace BooksStore2021.Mvc.Controllers
             shoppingCart.Email = (await GetCurrentUser()).Email;
             foreach (var cartLine in shoppingCart.Lines)
             {
-                cartLine.Product = await _productRep.FindAsync(cartLine.Product.ProductId);
+                cartLine.Product = await _productRep.FindByIdAsync(cartLine.Product.ProductId);
             }
 
             _shoppingCartRep.Add(shoppingCart);

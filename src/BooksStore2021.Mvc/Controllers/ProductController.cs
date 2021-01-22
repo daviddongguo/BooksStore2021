@@ -51,7 +51,7 @@ namespace BooksStore2021.Mvc.Controllers
                 return View(productViewModel);
             }
 
-            productViewModel.Product = await _productRep.FindAsync(id.GetValueOrDefault());
+            productViewModel.Product = await _productRep.FindByIdAsync(id.GetValueOrDefault());
             if (productViewModel.Product == null)
             {
                 return NotFound();

@@ -8,7 +8,7 @@ namespace BooksStore2021.Classlib.Abstract
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> FindAsync(long id);
+        Task<T> FindByIdAsync(long id);
         Task<T> FirstOrDefaultAsync(
             Expression<Func<T, bool>> filter = null,
             string includeProperties = null,

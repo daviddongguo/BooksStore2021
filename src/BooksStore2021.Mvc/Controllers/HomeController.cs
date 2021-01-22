@@ -59,7 +59,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var dbProduct = await _productRep.FindAsync(id);
+            var dbProduct = await _productRep.FindByIdAsync(id);
             if (dbProduct == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -77,7 +77,7 @@ namespace BooksStore2021.Mvc.Controllers
         [HttpPost, ActionName("Details")]
         public async Task<ActionResult> DetailsPost(long id)
         {
-            var product = await _productRep.FindAsync(id);
+            var product = await _productRep.FindByIdAsync(id);
             var cart = getSessionShoppingCart();
 
             if (cart == null)
@@ -100,7 +100,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public async Task<ActionResult> RemoveFromCart(long id)
         {
-            var product = await _productRep.FindAsync(id);
+            var product = await _productRep.FindByIdAsync(id);
             if (product != null)
             {
                 var cart = getSessionShoppingCart();
