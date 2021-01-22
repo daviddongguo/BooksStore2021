@@ -33,6 +33,7 @@ namespace BooksStore2021.Mvc.Controllers
         {
             HomeViewModel homeViewModel = new HomeViewModel
             {
+                //FIXME: use oderby on repository
                 Products = (await _productRep.GetAllAsync(p => String.IsNullOrEmpty(category) || p.Category.Contains(category)))
                     .OrderBy(p => p.ProductId)
                     .Skip((page - 1) * PAGE_SIZE)
