@@ -1,7 +1,7 @@
-﻿using BooksStore2021.Classlib.Abstract;
-using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Abstract;
+using BooksStore2021.Domain.Entities;
 
-namespace BooksStore2021.Classlib.Concrete
+namespace BooksStore2021.Domain.Concrete
 {
     public class EFOrderRepository: EFRepository<Order>, IOrderRepository
     {

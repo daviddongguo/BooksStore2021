@@ -1,4 +1,4 @@
-﻿using BooksStore2021.Classlib.Abstract;
+﻿using BooksStore2021.Domain.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksStore2021.Classlib.Concrete
+namespace BooksStore2021.Domain.Concrete
 {
     public class EFRepository<T> : IRepository<T> where T : class
     {

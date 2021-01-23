@@ -1,9 +1,9 @@
-﻿using BooksStore2021.Classlib.Concrete;
+﻿using BooksStore2021.Domain.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace BooksStore2021.Classlib.Initializer
+namespace BooksStore2021.Domain.Initializer
 {
     public class DbInitializer : IDbInitializer
     {

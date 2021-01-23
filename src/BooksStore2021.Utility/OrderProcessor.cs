@@ -1,4 +1,4 @@
-﻿using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

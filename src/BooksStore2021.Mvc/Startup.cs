@@ -1,6 +1,6 @@
-using BooksStore2021.Classlib.Abstract;
-using BooksStore2021.Classlib.Concrete;
-using BooksStore2021.Classlib.Initializer;
+using BooksStore2021.Domain.Abstract;
+using BooksStore2021.Domain.Concrete;
+using BooksStore2021.Domain.Initializer;
 using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

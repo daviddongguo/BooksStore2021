@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
     <ProjectReference Include="..\BooksStore2021.Mvc\BooksStore2021.Mvc.csproj" />
   </ItemGroup>
 

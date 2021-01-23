@@ -1,4 +1,4 @@
-@model BooksStore2021.Classlib.Entities.ShoppingCart
+@model BooksStore2021.Domain.Entities.ShoppingCart
 
 @if (Model?.Lines?.Count() > 0)
 {
@@ -23,7 +23,7 @@
                                     <div class="col-12 col-lg-2">
                                     </div>
                                     <div class="col-12 col-lg-4">
-                                        Product Details
+                                        Title
                                     </div>
                                     <div class="col-6 col-lg-2">
                                         Price
@@ -38,7 +38,6 @@
 
                             <hr />
                             @foreach (var line in Model.Lines)
-                            {
                             <div class="row h-100">
                                 <div class="col-12 col-lg-2 text-center py-2">
                                   @if(line.Product.ImageMimeType != null)
@@ -49,7 +48,6 @@
                                 </div>
                                 <div class="col-12 col-lg-4">
                                     <h5>@line.Product.Title</h5>
-                                    <div style="font-size:11px;">@line.Product.Description</div>
                                 </div>
                                 <div class="col-6 col-lg-2 pt-lg-2" style="font-size:11px;">
                                     <span style="font-size:17px;"> $@line.Product.Price</span>
@@ -81,7 +79,9 @@
                                 </div>
 
                                 <div class="col-6 col-md-3 offset-md-9">
-                                  @Html.ActionLink("Checkout", "Checkout", "Cart", null, new { @class="btn btn-success form-control"})
+                                    <button type="submit" class="btn btn-success form-control ">
+                                        <span>Continue</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -1,9 +1,9 @@
-﻿using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace BooksStore2021.Classlib.Abstract
+namespace BooksStore2021.Domain.Abstract
 {
     public interface IProductRepository : IRepository<Product>
     {

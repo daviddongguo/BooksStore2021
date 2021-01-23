@@ -1,4 +1,4 @@
-﻿using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;

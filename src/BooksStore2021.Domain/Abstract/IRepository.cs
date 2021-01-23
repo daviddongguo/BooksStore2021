@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BooksStore2021.Classlib.Abstract
+namespace BooksStore2021.Domain.Abstract
 {
     public interface IRepository<T> where T : class
     {

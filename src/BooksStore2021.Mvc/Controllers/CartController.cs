@@ -1,5 +1,5 @@
-﻿using BooksStore2021.Classlib.Abstract;
-using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Abstract;
+using BooksStore2021.Domain.Entities;
 using BooksStore2021.Mvc.Models.ViewModels;
 using BooksStore2021.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -50,8 +50,7 @@ namespace BooksStore2021.Mvc.Controllers
 
         public IActionResult Index()
         {
-            //return View(GetSessionShoppingCart());
-            return RedirectToAction(nameof(Summary));
+            return View(GetSessionShoppingCart());
         }
 
         [HttpPost]

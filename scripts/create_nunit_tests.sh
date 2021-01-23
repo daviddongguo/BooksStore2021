@@ -35,7 +35,7 @@ cd Entities
 cat > TodoTests.cs << EOF
 namespace $Root.NunitTests.Entities
 {
-    using $Root.Classlib.Entities;
+    using $Root.Domain.Entities;
     using NUnit.Framework;
     using System;
     using System.Linq;
@@ -93,7 +93,7 @@ EOF
 cd ../Services
 
 cat > LocalInMemoryDbContextFactory.cs << EOF
-using $Root.Classlib.Services;
+using $Root.Domain.Services;
 using $Root.NunitTests.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -131,7 +131,7 @@ namespace $Root.NunitTests.Services
 EOF
 
 cat > LocalDbTodoTests.cs << EOF
-using $Root.Classlib.Services;
+using $Root.Domain.Services;
 using NUnit.Framework;
 using System;
 using System.Linq;

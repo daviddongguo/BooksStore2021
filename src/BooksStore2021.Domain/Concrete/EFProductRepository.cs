@@ -1,5 +1,5 @@
-﻿using BooksStore2021.Classlib.Abstract;
-using BooksStore2021.Classlib.Entities;
+﻿using BooksStore2021.Domain.Abstract;
+using BooksStore2021.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace BooksStore2021.Classlib.Concrete
+namespace BooksStore2021.Domain.Concrete
 {
     public class EFProductRepository : EFRepository<Product>, IProductRepository
     {

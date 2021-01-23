@@ -8,8 +8,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
-  </ItemGroup>
-
 </Project>

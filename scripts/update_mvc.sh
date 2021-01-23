@@ -10,8 +10,8 @@ dotnet add package MySqlConnector -v 0.69.10
 
 cd ./Controllers
 cat > TodoesController.cs << EOF
-using $Root.Classlib.Entities;
-using $Root.Classlib.Services;
+using $Root.Domain.Entities;
+using $Root.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,7 +56,7 @@ mkdir Views/Todoes
 
 cd ./Views/Todoes/
 cat > Index.cshtml << EOF
-@model IEnumerable<$Root.Classlib.Entities.Todo>
+@model IEnumerable<$Root.Domain.Entities.Todo>
 <div>
   @foreach (var item in Model)
   {

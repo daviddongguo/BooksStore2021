@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace BooksStore2021.Classlib.Entities
+namespace BooksStore2021.Domain.Entities
 {
     public class ShippingDetails
     {

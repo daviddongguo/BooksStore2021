@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksStore2021.Classlib.Entities
+namespace BooksStore2021.Domain.Entities
 {
     public class Order
     {

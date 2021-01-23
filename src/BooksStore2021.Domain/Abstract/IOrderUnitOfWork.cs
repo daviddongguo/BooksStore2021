@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace BooksStore2021.Classlib.Abstract
+namespace BooksStore2021.Domain.Abstract
 {
     public interface IOrderUnitOfWork : IDisposable
     {

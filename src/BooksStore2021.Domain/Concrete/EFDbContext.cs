@@ -1,9 +1,9 @@
-using BooksStore2021.Classlib.Entities;
+using BooksStore2021.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BooksStore2021.Classlib.Concrete
+namespace BooksStore2021.Domain.Concrete
 {
     public class EFDbContext : IdentityDbContext
     {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 Root=${PWD##*/}
 
-cd $Root.Classlib && pwd
+cd $Root.Domain && pwd
 dotnet add package Microsoft.EntityFrameworkCore -v 3.1.10
 dotnet add package Microsoft.AspNetCore.Mvc.DataAnnotations -v 2.2.0
 
@@ -15,7 +15,7 @@ cd Entities
 cat > Todo.cs << EOF
 using System.Text.Json;
 
-namespace $Root.Classlib.Entities
+namespace $Root.Domain.Entities
 {
     public class Todo
     {
@@ -44,10 +44,10 @@ EOF
 
 cd ../Services
 cat > EFDbContext.cs << EOF
-using $Root.Classlib.Entities;
+using $Root.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace $Root.Classlib.Services
+namespace $Root.Domain.Services
 {
     public class EFDbContext : DbContext
     {

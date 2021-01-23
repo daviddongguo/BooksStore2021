@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BooksStore2021.Classlib\BooksStore2021.Classlib.csproj" />
+    <ProjectReference Include="..\BooksStore2021.Domain\BooksStore2021.Domain.csproj" />
   </ItemGroup>
 
 </Project>

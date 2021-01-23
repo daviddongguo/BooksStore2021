@@ -1,4 +1,4 @@
-﻿namespace BooksStore2021.Classlib.Entities
+﻿namespace BooksStore2021.Domain.Entities
 {
     using Newtonsoft.Json;
     using System.Collections.Generic;

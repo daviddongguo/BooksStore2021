@@ -1,5 +1,5 @@
-using BooksStore2021.Classlib.Entities;
-using BooksStore2021.Classlib.Concrete;
+using BooksStore2021.Domain.Entities;
+using BooksStore2021.Domain.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
