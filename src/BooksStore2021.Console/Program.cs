@@ -1,6 +1,5 @@
 using Mailjet.Client;
 using Mailjet.Client.Resources;
-using System;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 

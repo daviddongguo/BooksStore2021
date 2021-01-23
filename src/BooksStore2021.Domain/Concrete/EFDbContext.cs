@@ -1,5 +1,4 @@
 using BooksStore2021.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +23,7 @@ namespace BooksStore2021.Domain.Concrete
 
             // composite key
             modelBuilder.Entity<CartLine>()
-                .HasKey(c => new {c.ProductId, c.ShoppingCartId });
+                .HasKey(c => new { c.ProductId, c.ShoppingCartId });
         }
 
     }

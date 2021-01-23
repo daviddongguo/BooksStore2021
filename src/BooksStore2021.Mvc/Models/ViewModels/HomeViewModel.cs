@@ -1,8 +1,5 @@
-﻿using System;
+﻿using BooksStore2021.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BooksStore2021.Domain.Entities;
 
 namespace BooksStore2021.Mvc.Models.ViewModels
 {

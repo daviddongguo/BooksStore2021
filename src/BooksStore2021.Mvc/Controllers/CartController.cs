@@ -9,11 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,7 +89,7 @@ namespace BooksStore2021.Mvc.Controllers
             }
 
             await ShoppingCartPersistence(shoppingCart);
-            await ShoppingCartSendEmail(shoppingCart);       
+            await ShoppingCartSendEmail(shoppingCart);
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }
@@ -126,7 +123,7 @@ namespace BooksStore2021.Mvc.Controllers
         }
 
         private async Task ShoppingCartPersistence(ShoppingCart shoppingCart)
-        {           
+        {
             shoppingCart.Email = (await GetCurrentUser()).Email;
             foreach (var cartLine in shoppingCart.Lines)
             {

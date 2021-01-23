@@ -38,7 +38,8 @@
 
                             <hr />
                             @foreach (var line in Model.Lines)
-                            <div class="row h-100">
+                            {
+                                <div class="row h-100">
                                 <div class="col-12 col-lg-2 text-center py-2">
                                   @if(line.Product.ImageMimeType != null)
                                   {

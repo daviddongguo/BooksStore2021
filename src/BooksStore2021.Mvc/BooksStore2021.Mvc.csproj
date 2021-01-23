@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooksStore2021.Domain\BooksStore2021.Domain.csproj" />
     <ProjectReference Include="..\BooksStore2021.Utility\BooksStore2021.Utility.csproj" />
   </ItemGroup>
 

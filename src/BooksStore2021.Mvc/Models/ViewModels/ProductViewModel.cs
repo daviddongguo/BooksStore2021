@@ -1,9 +1,6 @@
 ﻿using BooksStore2021.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BooksStore2021.Mvc.Models.ViewModels
 {

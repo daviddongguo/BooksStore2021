@@ -1,10 +1,4 @@
-﻿using BooksStore2021.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-
-namespace BooksStore2021.Utility
+﻿namespace BooksStore2021.Utility
 {
     public class OrderProcessor
     {
