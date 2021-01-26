@@ -45,6 +45,7 @@ namespace BooksStore2021.Mvc
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IProductRepository, EFProductRepository>();
+            services.AddScoped<IOrderUnitOfWork, OrderUnitOfWork>();
             services.AddScoped<IOrderRepository, EFOrderRepository>();
             services.AddScoped<IShippingDetailsRepository, EFShippingDetailsRepository>();
             services.AddScoped<IShoppingCartRepository, EFShoppingCartRepository>();

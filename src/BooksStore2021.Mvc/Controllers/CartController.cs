@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RestSharp;
+using System;
 using System.IO;
 using System.Security.Claims;
 using System.Text;
@@ -21,6 +22,7 @@ namespace BooksStore2021.Mvc.Controllers
     {
         // GET: CartController
         private readonly IProductRepository _productRep;
+        private readonly IOrderUnitOfWork _orderUnitOfWork;
         private readonly IShoppingCartRepository _shoppingCartRep;
         private readonly IConfiguration _config;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -31,13 +33,14 @@ namespace BooksStore2021.Mvc.Controllers
         public CartController
             (IProductRepository productRep,
             IShoppingCartRepository shoppingCartRep,
-
+            IOrderUnitOfWork orderUnitOfWork,
             IConfiguration config,
             IWebHostEnvironment webHostEnvironment,
             UserManager<IdentityUser> userManager,
             IEmailSender emailSender)
         {
             _productRep = productRep;
+            _orderUnitOfWork = orderUnitOfWork;
             _shoppingCartRep = shoppingCartRep;
             _config = config;
             _webHostEnvironment = webHostEnvironment;
@@ -55,8 +58,43 @@ namespace BooksStore2021.Mvc.Controllers
         [ActionName("Index")]
         public IActionResult IndexPost()
         {
+            return RedirectToAction(nameof(Checkout));
+        }
+
+        public async Task<IActionResult> Checkout()
+        {
+            var user = await GetCurrentUser();
+            var shippingDetails = await _orderUnitOfWork.ShippingDetails.FirstOrDefaultAsync(s => string.Equals(s.Email, user.Email, StringComparison.OrdinalIgnoreCase));
+            return View(shippingDetails ?? new ShippingDetails());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(ShippingDetails shippingDetails)
+        {
+            // Save order
+            var shoppingCart = GetSessionShoppingCart();
+            if (shoppingCart == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            await ShoppingCartPersistence(shoppingCart);
+            _orderUnitOfWork.ShippingDetails.Add(shippingDetails);
+            await _orderUnitOfWork.Complete();
+            _orderUnitOfWork.Orders
+                .Add(new Order
+                {
+                    ShippingDetails = shippingDetails,
+                    ShoppingCart = shoppingCart,
+                    OrderDate = DateTime.Now,
+                });
+
+            await _orderUnitOfWork.Complete();
+
             return RedirectToAction(nameof(Summary));
         }
+
+
 
         [BindProperty]
         public ShoppingCartUserViewModel ShoppingCartUserViewModel { get; set; }
@@ -65,12 +103,14 @@ namespace BooksStore2021.Mvc.Controllers
         public async Task<IActionResult> Summary()
         {
             var user = await GetCurrentUser();
+            var shippingDetails = await _orderUnitOfWork.ShippingDetails.FirstOrDefaultAsync(s => string.Equals(s.Email, user.Email, StringComparison.OrdinalIgnoreCase));
             var shoppingCart = GetSessionShoppingCart();
             shoppingCart.Email = user.Email;
             ShoppingCartUserViewModel = new ShoppingCartUserViewModel()
             {
                 User = user,
                 ShoppingCart = shoppingCart,
+                ShippingDetails = shippingDetails,
             };
 
             return View(ShoppingCartUserViewModel);
@@ -82,15 +122,6 @@ namespace BooksStore2021.Mvc.Controllers
         [ActionName("Summary")]
         public async Task<IActionResult> SummaryPost(ShoppingCartUserViewModel ShoppingCartUserViewModel)
         {
-            var shoppingCart = GetSessionShoppingCart();
-            if (shoppingCart == null)
-            {
-                return RedirectToAction(nameof(Summary));
-            }
-
-            await ShoppingCartPersistence(shoppingCart);
-            await ShoppingCartSendEmail(shoppingCart);
-
             return RedirectToAction(nameof(InquiryConfirmation));
         }
 
@@ -114,7 +145,7 @@ namespace BooksStore2021.Mvc.Controllers
                 productListSB.Append($" - Name: { cartLine.Product.Title} <span style='font-size:14px;'> (Price: {cartLine.Product.Price})</span><br />");
             }
 
-            // Send a email 
+            // Send a email
             var subject = "New Inquiry";
             string messageBody = string.Format(HtmlBody,
                 ShoppingCartUserViewModel?.User.Email ?? "",
