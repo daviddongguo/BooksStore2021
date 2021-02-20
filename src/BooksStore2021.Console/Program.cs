@@ -13,10 +13,7 @@ namespace BooksStore2021.Console
         }
         static async Task RunAsync()
         {
-            MailjetClient client = new MailjetClient("aebc03f5af0232f5e9bcdb7ddf6095fb", "85be983aa2b2e17ace7cc30ee0868e72")
-            {
-                Version = ApiVersion.V3_1,
-            };
+            MailjetClient client = new MailjetClient("aebc03f5af0232f5e9bcdb7ddf6095fb", "85be983aa2b2e17ace7cc30ee0868e72");
             MailjetRequest request = new MailjetRequest
             {
                 Resource = Send.Resource,

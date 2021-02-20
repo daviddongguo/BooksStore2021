@@ -24,10 +24,7 @@ namespace BooksStore2021.Utility
         public async Task Execute(string email, string subject, string body)
         {
             _mailJetSettings = _configuration.GetSection("MailJet").Get<MailJetSettings>();
-            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey)
-            {
-                Version = ApiVersion.V3_1,
-            };
+            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey);
 
             MailjetRequest request = new MailjetRequest
             {
