@@ -51,6 +51,12 @@ namespace BooksStore2021.Mvc
             services.AddScoped<IShoppingCartRepository, EFShoppingCartRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
 
+            services.AddAuthentication().AddFacebook(Options => 
+            {
+                Options.AppId = "2790734737849284";
+                Options.AppSecret = "6898c6807fe104e50938487af2628db4";
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
